@@ -15,10 +15,75 @@
 
 @theme {
   --color-brand: #ce4257;
+  /* Brand lifted just enough for small text to pass WCAG AA (5.0:1 on the page background).
+     Use for text; keep `brand` for fills, borders, rings and large display text. */
+  --color-brand-text: color-mix(in srgb, var(--color-brand) 89%, white);
+
+  /* Hero entrance (see hero-section.tsx). `both` holds the start frame through each delay. */
+  --animate-hero-word: hero-word 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-hero-rise: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-hero-photo: hero-photo 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  @keyframes hero-word {
+    from {
+      transform: translateY(110%);
+    }
+  }
+  @keyframes hero-rise {
+    from {
+      filter: blur(10px);
+      transform: translateY(12px);
+    }
+  }
+  @keyframes hero-photo {
+    from {
+      transform: scale(1.08);
+    }
+  }
+
+  --animate-nudge: nudge 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  @keyframes nudge {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+  }
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-brand) 55%, transparent);
+    color: var(--color-foreground);
+  }
+
+  html {
+    scrollbar-color: var(--color-zinc-700) var(--background);
+    accent-color: var(--color-brand);
+    caret-color: var(--color-brand);
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Keep section headings clear of the fixed nav (h-16) when jumped to. */
+section[id],
+article[id] {
+  scroll-margin-top: 5rem;
 }

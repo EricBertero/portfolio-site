@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eric Bertero — Portfolio
 
-## Getting Started
+A single-page portfolio site for a cybersecurity/IT professional, built with Next.js. Hero → About → Skills → Projects → Experience → Certifications → Contact, with a working contact form, security-hardened headers, and full SEO metadata.
 
-First, run the development server:
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + React 19 + TypeScript
+- [Tailwind CSS v4](https://tailwindcss.com) (configured via `@theme` in `app/globals.css` — there's no `tailwind.config.ts`)
+- [`motion`](https://motion.dev) for animation, [`simple-icons`](https://simpleicons.org) for tool logos
+- [Resend](https://resend.com) for contact-form email, validated server-side with [Zod](https://zod.dev)
+- Deploys as a Docker container behind Caddy on a self-managed VPS (see `PLAN.md`, Phase 8 — not yet built)
+
+## Getting started
+
+Requires **Node.js 20.9 or later**.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The page hot-reloads as you edit.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint      # ESLint
+npm run build     # Production build
+npm run start     # Serve the production build (run `build` first)
+```
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+Copy `.env.example` to `.env.local` for local development:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp .env.example .env.local
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Required | Purpose |
+|---|---|---|
+| `SITE_URL` | No (defaults to `http://localhost:3000`) | Public origin used for canonical URLs, the sitemap, robots.txt and social preview images. Set this to the real domain in production. |
+| `RESEND_API_KEY` | No in development | Resend API key for sending contact-form emails. If unset in development, submissions are logged to the server console instead of sent. **Required in production.** |
+| `CONTACT_TO_EMAIL` | Required in production | Inbox that contact-form messages are delivered to. |
+| `CONTACT_FROM_EMAIL` | Required in production | Sender address — must be on a domain verified with Resend, e.g. `Portfolio <contact@example.com>`. |
 
-## Deploy on Vercel
+Never commit real values — `.env.local` and `.env` are git-ignored; only `.env.example` is tracked.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/                  Routes, layout, metadata, robots/sitemap, the contact Server Action
+components/
+  sections/           One component per page section (hero, about, skills, …)
+  ui/                 Shared primitives (Button, Container, icons, …)
+content/site.ts        All copy, links, projects, and certifications — typed, in one place
+lib/                   Small shared helpers (class-name join, brand colors, …)
+proxy.ts               Middleware: nonce-based Content-Security-Policy + security headers
+public/                Static assets (resume, certification badges, hero photo)
+```
+
+Site content — your name, bio, skills, projects, experience, and certifications — all lives in [`content/site.ts`](content/site.ts) as typed data. Components render that data; there's no personal content hard-coded elsewhere, so updating the site's copy usually means editing just that one file.
+
+## Security
+
+- Strict, nonce-based CSP and standard security headers (HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, COOP) are set in `proxy.ts` and `next.config.ts`.
+- Contact-form input is validated server-side with Zod, rate-limited per IP, and includes a honeypot field.
+- No third-party trackers or analytics scripts.
+
+See `CLAUDE.md` for the full set of project conventions, and `PLAN.md` for the build roadmap and what's still open.
