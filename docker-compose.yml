@@ -1,0 +1,39 @@
+# Runs the site and a Cloudflare Tunnel connector side by side on an internal-only
+# bridge network. Nothing is published to the host: the tunnel reaches the site
+# container directly over `webnet`, so no inbound port ever needs forwarding on the
+# router. See DEPLOY.md for the one-time Cloudflare setup this depends on.
+#
+# Reads variables from a `.env` file next to this one (see .env.example): SITE_URL is
+# passed through as a build arg (needed at build time by the static robots/sitemap
+# routes); RESEND_API_KEY, CONTACT_TO_EMAIL and CONTACT_FROM_EMAIL are passed to the
+# running container via env_file; TUNNEL_TOKEN configures the Cloudflare connector.
+
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SITE_URL: ${SITE_URL}
+    container_name: portfolio
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - webnet
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+      - webnet
+    depends_on:
+      - portfolio
+
+networks:
+  webnet:
+    driver: bridge

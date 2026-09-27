@@ -74,8 +74,14 @@ function isRateLimited(ip: string, now: number): boolean {
 }
 
 async function clientIp(): Promise<string> {
-  // Caddy sets X-Forwarded-For and the app port is never exposed publicly, so the first hop is trusted.
-  const forwarded = (await headers()).get("x-forwarded-for");
+  // The app is only reachable through the Cloudflare Tunnel (see DEPLOY.md) — never
+  // directly — so CF-Connecting-IP, which Cloudflare's edge sets and a client can't
+  // spoof, is trusted. X-Forwarded-For is the fallback for local dev and `npm start`.
+  const requestHeaders = await headers();
+  const cfConnectingIp = requestHeaders.get("cf-connecting-ip");
+  if (cfConnectingIp) return cfConnectingIp.trim();
+
+  const forwarded = requestHeaders.get("x-forwarded-for");
   return forwarded?.split(",")[0]?.trim() || "unknown";
 }
 

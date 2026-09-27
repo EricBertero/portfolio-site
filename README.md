@@ -8,7 +8,7 @@ A single-page portfolio site for a cybersecurity/IT professional, built with Nex
 - [Tailwind CSS v4](https://tailwindcss.com) (configured via `@theme` in `app/globals.css` — there's no `tailwind.config.ts`)
 - [`motion`](https://motion.dev) for animation, [`simple-icons`](https://simpleicons.org) for tool logos
 - [Resend](https://resend.com) for contact-form email, validated server-side with [Zod](https://zod.dev)
-- Deploys as a Docker container behind Caddy on a self-managed VPS (see `PLAN.md`, Phase 8 — not yet built)
+- Deploys as a Docker container reached only through a Cloudflare Tunnel — see `DEPLOY.md`
 
 ## Getting started
 
@@ -43,6 +43,7 @@ cp .env.example .env.local
 | `RESEND_API_KEY` | No in development | Resend API key for sending contact-form emails. If unset in development, submissions are logged to the server console instead of sent. **Required in production.** |
 | `CONTACT_TO_EMAIL` | Required in production | Inbox that contact-form messages are delivered to. |
 | `CONTACT_FROM_EMAIL` | Required in production | Sender address — must be on a domain verified with Resend, e.g. `Portfolio <contact@example.com>`. |
+| `TUNNEL_TOKEN` | Deployment only | Cloudflare Tunnel token, used by `docker-compose.yml`. Not needed for local dev. |
 
 Never commit real values — `.env.local` and `.env` are git-ignored; only `.env.example` is tracked.
 
@@ -66,5 +67,9 @@ Site content — your name, bio, skills, projects, experience, and certification
 - Strict, nonce-based CSP and standard security headers (HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, COOP) are set in `proxy.ts` and `next.config.ts`.
 - Contact-form input is validated server-side with Zod, rate-limited per IP, and includes a honeypot field.
 - No third-party trackers or analytics scripts.
+
+## Deployment
+
+Runs as a Docker container reached only through a Cloudflare Tunnel — nothing is ever exposed to the internet directly. See [`DEPLOY.md`](DEPLOY.md) for the full runbook (creating the tunnel, `docker compose up -d --build`, edge hardening, and updates).
 
 See `CLAUDE.md` for the full set of project conventions, and `PLAN.md` for the build roadmap and what's still open.

@@ -1,0 +1,19 @@
+node_modules
+.next
+.git
+.github
+
+# Editor/tool state not needed in the image
+.claude
+.impeccable
+
+# Env files: real values are injected at runtime via docker-compose env_file, not baked in
+.env*
+!.env.example
+
+# Docs — informative for the repo, irrelevant to the running container
+*.md
+
+Dockerfile
+docker-compose.yml
+.dockerignore

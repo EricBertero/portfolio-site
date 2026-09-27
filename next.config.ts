@@ -15,6 +15,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Produces .next/standalone: a self-contained server with only the deps actually used
+  // (see Dockerfile), so the runtime image doesn't need node_modules or the source tree.
+  output: "standalone",
   poweredByHeader: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
