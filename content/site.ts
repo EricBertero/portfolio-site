@@ -142,17 +142,20 @@ export interface Profile {
 export const profile: Profile = {
   name: "Eric Bertero",
   title: "Junior Cybersecurity Analyst · Security Operations",
-  tagline: "Monitoring, investigating, and responding to threats across enterprise security tooling.",
+  tagline:
+    "Watching for threats, digging into what's actually going on, and closing the gaps before they turn into incidents.",
   location: "Oakville, ON",
-  lead: "I'm a junior cybersecurity analyst with hands-on security operations experience in threat monitoring, phishing investigation, vulnerability management, and SOC 2 access reviews.",
+  lead: "I'm a junior cybersecurity analyst who's happiest in the weeds of security operations: triaging alerts, investigating phishing attempts, tracking down vulnerabilities, and running SOC 2 access reviews.",
   bio: [
-    "I'm a daily operator of CrowdStrike Falcon, Sumo Logic, and Tenable Nessus, backed by strong systems fundamentals across Windows Server, Linux, Active Directory, and Entra ID, and by Python automation of recurring security tasks. I'm CompTIA Security+ and CySA+ certified.",
-    "Outside of work I build and operate a self-hosted homelab — a four-node Proxmox and Docker environment secured with Cloudflare Zero Trust, Tailscale, and WireGuard — and I'm designing an AI-driven cyber range that simulates a small company's IT environment for hands-on detection-and-response practice.",
+    "I've worked hands-on with tools like CrowdStrike Falcon, Sumo Logic, and Tenable Nessus, and right now most of my time goes into Splunk, where I'm working through the certification track (Core Power User to Enterprise Certified Admin), along with Python for automating the repetitive parts of the job. Underneath all of that is a solid systems foundation: Windows Server, Linux, Active Directory, and Entra ID.",
+    "Outside of work, I run a self-hosted homelab: a four-node Proxmox and Docker setup locked down with Cloudflare Zero Trust, Tailscale, and WireGuard. Right now I'm building on top of it, an AI-driven cyber range that simulates a small company's IT environment, complete with a helpdesk and fake employees generating real support tickets, so I can practice detection and response against something that actually behaves like a live network.",
+    "What ties all of this together for me is a genuine interest in privacy, security, automation, and system administration. I like figuring out how systems work well enough to protect them, and stopping myself from doing the same task twice by hand.",
+    "Outside of tech, I'm usually planning my next trip or trying to get a new recipe right. Good food and new places are pretty much my other two hobbies.",
   ],
   facts: [
     { label: "Based in", value: "Oakville, ON" },
     { label: "Availability", value: "Full-time from January 2027" },
-    { label: "Education", value: "Advanced Diploma, Software Development & Network Engineering — Sheridan College, Dec 2026" },
+    { label: "Education", value: "Advanced Diploma, Software Development & Network Engineering, Sheridan College, Dec 2026" },
     { label: "Languages", value: "English, Italian" },
   ],
 };
