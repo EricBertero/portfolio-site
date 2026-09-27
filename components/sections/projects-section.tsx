@@ -20,7 +20,7 @@ function StackList({ stack, label }: { stack: string[]; label: string }) {
   return (
     <ul aria-label={label} className="flex flex-wrap gap-2">
       {stack.map((tech) => (
-        <li key={tech} className="rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-300">
+        <li key={tech} className="rounded-full border border-line px-3 py-1 text-xs text-soft">
           {tech}
         </li>
       ))}
@@ -30,7 +30,7 @@ function StackList({ stack, label }: { stack: string[]; label: string }) {
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="border-t border-white/5 py-24 sm:py-32">
+    <section id="projects" className="border-t border-line/50 py-24 sm:py-32">
       <Container className="flex flex-col gap-16">
         <Reveal>
           <SectionHeading title="Projects" description={sectionIntros.projects} />
@@ -47,7 +47,7 @@ export default function ProjectsSection() {
                 {cyberRange.title}
               </h3>
             </div>
-            <p className="text-base leading-7 text-zinc-400 lg:col-span-5">{cyberRange.summary}</p>
+            <p className="text-base leading-7 text-muted lg:col-span-5">{cyberRange.summary}</p>
           </Reveal>
 
           <Reveal>
@@ -60,9 +60,9 @@ export default function ProjectsSection() {
 
           <RevealGroup className="grid gap-10 md:grid-cols-3 md:gap-8">
             {CASE_STUDY_BLOCKS.map(({ label, text }) => (
-              <RevealItem key={label} className="border-t border-white/10 pt-6">
+              <RevealItem key={label} className="border-t border-line pt-6">
                 <h4 className="text-sm font-semibold text-foreground">{label}</h4>
-                <p className="mt-3 text-sm leading-6 text-zinc-400">{text}</p>
+                <p className="mt-3 text-sm leading-6 text-muted">{text}</p>
               </RevealItem>
             ))}
           </RevealGroup>
@@ -78,7 +78,7 @@ export default function ProjectsSection() {
                 alt={`${cyberRange.title} architecture diagram`}
                 width={1200}
                 height={675}
-                className="w-full rounded-xl border border-white/10"
+                className="w-full rounded-xl border border-line"
               />
             ) : null}
 
@@ -108,14 +108,14 @@ export default function ProjectsSection() {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="flex w-full flex-col gap-5 rounded-2xl border border-white/10 bg-zinc-900/40 p-6 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-brand/40 hover:shadow-[0_16px_40px_-16px] hover:shadow-brand/40 motion-safe:hover:-translate-y-1 sm:p-8">
+    <article className="flex w-full flex-col gap-5 rounded-2xl border border-line bg-surface p-6 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-brand/40 hover:shadow-[0_16px_40px_-16px] hover:shadow-brand/40 motion-safe:hover:-translate-y-1 sm:p-8">
       <div className="flex flex-col gap-3">
         <StatusLabel status={project.status} />
         <h3 className="text-xl font-semibold tracking-tight text-foreground">{project.title}</h3>
-        <p className="text-sm leading-6 text-zinc-400">{project.summary}</p>
+        <p className="text-sm leading-6 text-muted">{project.summary}</p>
       </div>
 
-      <ul className="flex flex-col gap-3 text-sm leading-6 text-zinc-300">
+      <ul className="flex flex-col gap-3 text-sm leading-6 text-soft">
         {project.highlights.map((highlight) => (
           <li key={highlight} className="grid grid-cols-[0.75rem_minmax(0,1fr)] gap-2">
             <span aria-hidden="true" className="mt-2.5 h-px w-3 bg-brand" />

@@ -1,23 +1,77 @@
 @import "tailwindcss";
 
-:root {
+/*
+ * Semantic color tokens. Dark is the default; light follows the visitor's system setting
+ * (no toggle, no JS, so no flash). `.theme-dark` pins a subtree to the dark values, which is
+ * how the photo hero and the nav over it stay dark in light mode. Components use only these
+ * tokens (`text-muted`, `bg-surface`, `border-line`, …), never raw palette utilities.
+ *
+ *   soft    secondary emphasis text      muted   secondary text / labels (smallest text color)
+ *   faint   non-text only: input borders, markers (3:1+, below AA for text in dark mode)
+ *   surface cards                        surface-2  inputs, tiles
+ *   line    hairline borders             line-strong  control borders
+ *   brand-text  crimson small text (AA on this mode's background)   danger  field errors
+ */
+:root,
+.theme-dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --soft: #d4d4d8;
+  --muted: #a1a1aa;
+  --faint: #71717a;
+  --surface: rgb(24 24 27 / 0.4);
+  --surface-2: #27272a;
+  --line: rgb(255 255 255 / 0.1);
+  --line-strong: rgb(255 255 255 / 0.2);
+  /* Brand lifted just enough for small text to pass WCAG AA (5.0:1 on #0a0a0a). */
+  --brand-text: color-mix(in srgb, #ce4257 89%, white);
+  --danger: #f87171;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+.theme-dark {
   color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #fafafa;
+    --foreground: #0a0a0a;
+    --soft: #3f3f46;
+    --muted: #52525b;
+    --faint: #71717a;
+    --surface: #ffffff;
+    --surface-2: #f4f4f5;
+    --line: rgb(10 10 10 / 0.1);
+    --line-strong: rgb(10 10 10 / 0.22);
+    /* Brand deepened for small text on a light page (~5.8:1 on #fafafa). */
+    --brand-text: color-mix(in srgb, #ce4257 85%, black);
+    --danger: #b91c1c;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-soft: var(--soft);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brand-text: var(--brand-text);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @theme {
+  /* Fills, borders, rings and large display text. Small crimson text uses `brand-text`. */
   --color-brand: #ce4257;
-  /* Brand lifted just enough for small text to pass WCAG AA (5.0:1 on the page background).
-     Use for text; keep `brand` for fills, borders, rings and large display text. */
-  --color-brand-text: color-mix(in srgb, var(--color-brand) 89%, white);
 
   /* Hero entrance (see hero-section.tsx). `both` holds the start frame through each delay. */
   --animate-hero-word: hero-word 1s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -40,7 +94,8 @@
     }
   }
 
-  --animate-nudge: nudge 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  /* Two cycles (under 5s) and it stops, so it needs no pause control (WCAG 2.2.2). */
+  --animate-nudge: nudge 2.4s cubic-bezier(0.16, 1, 0.3, 1) 2;
   @keyframes nudge {
     0%,
     100% {
@@ -64,9 +119,11 @@
   }
 
   html {
-    scrollbar-color: var(--color-zinc-700) var(--background);
+    scrollbar-color: var(--line-strong) var(--background);
     accent-color: var(--color-brand);
     caret-color: var(--color-brand);
+    /* Keeps anchor targets and keyboard focus clear of the fixed nav (h-16), WCAG 2.4.11. */
+    scroll-padding-top: 5rem;
   }
 }
 
@@ -80,10 +137,4 @@ body {
   html {
     scroll-behavior: smooth;
   }
-}
-
-/* Keep section headings clear of the fixed nav (h-16) when jumped to. */
-section[id],
-article[id] {
-  scroll-margin-top: 5rem;
 }

@@ -6,7 +6,7 @@ import { SkillsExplorer } from "@/components/skills-explorer";
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="border-t border-white/5 py-24 sm:py-32">
+    <section id="skills" className="border-t border-line/50 py-24 sm:py-32">
       <Container className="flex flex-col gap-12">
         <Reveal>
           <SectionHeading title="Skills" description={sectionIntros.skills} />

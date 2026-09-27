@@ -22,7 +22,8 @@ export function YoutubeEmbed({ youtubeId, poster, title }: YoutubeEmbedProps) {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-zinc-900">
+    // Always dark: the poster and play overlay are dark imagery in both color schemes.
+    <div className="theme-dark relative aspect-video w-full overflow-hidden rounded-xl border border-line bg-surface-2">
       {playing && youtubeId ? (
         <iframe
           className="absolute inset-0 h-full w-full"
@@ -53,7 +54,7 @@ export function YoutubeEmbed({ youtubeId, poster, title }: YoutubeEmbedProps) {
             </button>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-              <p className="text-sm font-medium text-zinc-300">Demo coming soon</p>
+              <p className="text-sm font-medium text-soft">Demo coming soon</p>
             </div>
           )}
         </>

@@ -1,43 +1,41 @@
 import { profile } from "@/content/site";
 import { Container } from "@/components/ui/container";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function AboutSection() {
   return (
     <section id="about" aria-labelledby="about-heading" className="py-24 sm:py-32">
-      <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-7">
-          <Reveal>
-            <h2 id="about-heading" className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              About
-            </h2>
-            <p className="mt-8 text-2xl leading-snug font-medium tracking-[-0.02em] text-balance text-foreground sm:text-3xl sm:leading-snug">
-              {profile.lead}
+      <Container className="flex flex-col gap-14 sm:gap-20">
+        <Reveal>
+          <h2 id="about-heading" className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            About
+          </h2>
+          <p className="mt-8 max-w-5xl text-2xl leading-snug font-medium tracking-[-0.02em] text-balance text-foreground sm:text-4xl sm:leading-snug">
+            {profile.lead}
+          </p>
+        </Reveal>
+
+        {/* Two balanced newspaper columns on wide screens (each ~60 characters a line). */}
+        <Reveal delay={0.1} className="max-w-[62ch] text-base leading-7 text-muted lg:max-w-none lg:columns-2 lg:gap-16">
+          {profile.bio.map((paragraph) => (
+            <p key={paragraph} className="mb-5 last:mb-0">
+              {paragraph}
             </p>
-          </Reveal>
+          ))}
+        </Reveal>
 
-          <Reveal delay={0.1} className="mt-8 max-w-md space-y-5 text-base leading-7 text-zinc-400">
-            {profile.bio.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+        {/* Facts strip: stacked rows on small screens, one horizontal band of four on wide ones.
+            The first column stays flush with the text above it. */}
+        <Reveal delay={0.15} className="border-y border-line">
+          <dl className="grid divide-y divide-line lg:grid-cols-4 lg:divide-x lg:divide-y-0">
+            {profile.facts.map(({ label, value }) => (
+              <div key={label} className="flex flex-col gap-2 py-6 lg:px-6 lg:first:pl-0 lg:last:pr-0">
+                <dt className="text-sm text-muted">{label}</dt>
+                <dd className="text-base leading-snug text-balance text-foreground">{value}</dd>
+              </div>
             ))}
-          </Reveal>
-        </div>
-
-        <div className="lg:col-span-5 lg:pt-16">
-          <RevealGroup as="div" className="border-t border-white/10">
-            <dl>
-              {profile.facts.map(({ label, value }) => (
-                <RevealItem
-                  key={label}
-                  className="grid gap-1 border-b border-white/10 py-4 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6"
-                >
-                  <dt className="text-sm text-zinc-400">{label}</dt>
-                  <dd className="text-sm text-foreground">{value}</dd>
-                </RevealItem>
-              ))}
-            </dl>
-          </RevealGroup>
-        </div>
+          </dl>
+        </Reveal>
       </Container>
     </section>
   );

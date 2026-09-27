@@ -19,33 +19,40 @@ function countItems(category: SkillCategory) {
 /** Accordion of skill categories; one open at a time, each revealing its sub-groups. */
 export function SkillCategories({ categories, activeId, onToggle }: SkillCategoriesProps) {
   return (
-    <div className="border-t border-white/10">
+    <div className="border-t border-line">
       {categories.map((category) => {
         const open = category.id === activeId;
         const buttonId = `skills-${category.id}-button`;
         const panelId = `skills-${category.id}-panel`;
+        const titleId = `skills-${category.id}-title`;
+        const countId = `skills-${category.id}-count`;
+        const summaryId = `skills-${category.id}-summary`;
 
         return (
-          <div key={category.id} className="border-b border-white/10">
+          <div key={category.id} className="border-b border-line">
             <h3>
               <button
                 id={buttonId}
                 type="button"
                 aria-expanded={open}
                 aria-controls={panelId}
+                // Announced as just the category name; the count and summary are its description.
+                aria-labelledby={titleId}
+                aria-describedby={`${countId} ${summaryId}`}
                 onClick={() => onToggle(category.id)}
                 className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6 gap-y-1 py-6 text-left"
               >
                 <span
+                  id={titleId}
                   className={cn(
                     "text-lg font-semibold tracking-tight transition-colors sm:text-xl",
-                    open ? "text-foreground" : "text-zinc-300 group-hover:text-foreground",
+                    open ? "text-foreground" : "text-soft group-hover:text-foreground",
                   )}
                 >
                   {category.title}
                 </span>
                 <span className="row-span-2 flex items-center gap-3 pt-0.5">
-                  <span className="hidden text-sm text-zinc-400 tabular-nums sm:inline">
+                  <span id={countId} className="hidden text-sm text-muted tabular-nums sm:inline">
                     {countItems(category)} skills
                   </span>
                   <span
@@ -53,7 +60,7 @@ export function SkillCategories({ categories, activeId, onToggle }: SkillCategor
                       "flex h-8 w-8 items-center justify-center rounded-full border transition-colors duration-300",
                       open
                         ? "border-brand bg-brand text-white"
-                        : "border-white/15 text-zinc-300 group-hover:border-brand",
+                        : "border-line-strong text-soft group-hover:border-brand",
                     )}
                   >
                     <PlusIcon
@@ -65,7 +72,9 @@ export function SkillCategories({ categories, activeId, onToggle }: SkillCategor
                     />
                   </span>
                 </span>
-                <span className="text-sm leading-6 text-zinc-400">{category.summary}</span>
+                <span id={summaryId} className="text-sm leading-6 text-muted">
+                  {category.summary}
+                </span>
               </button>
             </h3>
 
@@ -92,17 +101,18 @@ export function SkillCategories({ categories, activeId, onToggle }: SkillCategor
                 {category.groups.map((group) => (
                   <m.div
                     key={group.title}
+                    className="pt-3"
                     variants={{
                       hidden: { opacity: 0, y: 12 },
                       shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT_EXPO } },
                     }}
                   >
-                    <h4 className="text-sm font-medium text-zinc-400">{group.title}</h4>
-                    <ul className="mt-3 flex flex-wrap gap-2">
+                    <h4 className="text-sm font-medium text-muted">{group.title}</h4>
+                    <ul className="mt-2 flex flex-wrap gap-2">
                       {group.items.map((item) => (
                         <li
                           key={item}
-                          className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-sm text-zinc-200"
+                          className="rounded-full border border-line bg-surface px-3 py-1 text-sm text-soft"
                         >
                           {item}
                         </li>

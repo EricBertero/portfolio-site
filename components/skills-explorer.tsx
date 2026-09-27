@@ -19,18 +19,20 @@ export function SkillsExplorer({ categories, defaultOpenId }: SkillsExplorerProp
   );
 
   return (
+    // The accordion leads on every screen size: it's the content, and on a phone the grid
+    // below it shows the result of opening a category right after the tap.
     <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-      <div className="lg:col-span-5 lg:order-2">
-        <div className="lg:sticky lg:top-24">
-          <SkillTileGrid badges={badges} activeCategory={activeId} />
-        </div>
-      </div>
-      <div className="lg:col-span-7 lg:order-1">
+      <div className="lg:col-span-7">
         <SkillCategories
           categories={categories}
           activeId={activeId}
           onToggle={(id) => setActiveId((current) => (current === id ? null : id))}
         />
+      </div>
+      <div className="lg:col-span-5">
+        <div className="lg:sticky lg:top-24">
+          <SkillTileGrid badges={badges} activeCategory={activeId} />
+        </div>
       </div>
     </div>
   );

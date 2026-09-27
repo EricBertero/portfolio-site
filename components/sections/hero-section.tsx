@@ -22,7 +22,7 @@ export default function HeroSection() {
     <section
       id="home"
       aria-label="Introduction"
-      className="relative isolate flex h-svh min-h-[36rem] flex-col overflow-hidden"
+      className="theme-dark relative isolate flex h-svh min-h-[36rem] flex-col overflow-hidden bg-background text-foreground"
     >
       <HeroPhoto src={hero.photo} alt={hero.photoAlt} />
 
@@ -48,7 +48,7 @@ export default function HeroSection() {
             {profile.title}
           </p>
           <p
-            className="mt-3 max-w-xl text-base leading-7 text-zinc-200 motion-safe:animate-hero-rise sm:text-lg"
+            className="mt-3 max-w-xl text-base leading-7 text-soft motion-safe:animate-hero-rise sm:text-lg"
             style={riseDelay(1)}
           >
             {profile.tagline}
@@ -58,7 +58,7 @@ export default function HeroSection() {
               <DownloadIcon className="h-5 w-5" aria-hidden="true" />
               Download resume
             </Button>
-            <Button href="#contact" className="border-white/25 bg-background/40 backdrop-blur-sm">
+            <Button href="#contact" className="border-line-strong bg-background/40 backdrop-blur-sm">
               Get in touch
             </Button>
           </div>
@@ -66,9 +66,9 @@ export default function HeroSection() {
 
         <a
           href="#about"
-          className="group mt-auto mb-6 inline-flex min-h-11 w-fit items-center gap-3 self-center text-xs font-medium tracking-[0.2em] text-zinc-300 uppercase transition-colors hover:text-foreground sm:self-start"
+          className="group mt-auto mb-6 inline-flex min-h-11 w-fit items-center gap-3 self-center text-xs font-medium tracking-[0.2em] text-soft uppercase transition-colors hover:text-foreground sm:self-start"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 transition-colors group-hover:border-brand">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-line-strong transition-colors group-hover:border-brand">
             <ArrowDownIcon className="h-4 w-4 motion-safe:animate-nudge" aria-hidden="true" />
           </span>
           Scroll

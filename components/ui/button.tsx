@@ -26,7 +26,7 @@ const BASE_CLASSES =
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   solid: "bg-brand text-white hover:bg-brand/90",
-  outline: "border border-white/10 text-foreground hover:border-brand hover:text-brand-text",
+  outline: "border border-line text-foreground hover:border-brand hover:text-brand-text",
 };
 
 function omit<T extends object, K extends keyof T>(obj: T, keys: readonly K[]): Omit<T, K> {

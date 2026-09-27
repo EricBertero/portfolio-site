@@ -29,7 +29,9 @@ export function HeroPhoto({ src, alt }: { src: string; alt: string }) {
         </div>
       </m.div>
 
-      {/* Scrims keep the nav and copy at AA contrast over the photo; the last one fades into the page. */}
+      {/* Scrims keep the nav and copy at AA contrast over the photo. They resolve to dark in both
+          color schemes (the hero is a .theme-dark scope), so in light mode the hero ends in a
+          clean edge against the page rather than fading the photo out to white. */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-background/90 via-background/75 to-transparent"

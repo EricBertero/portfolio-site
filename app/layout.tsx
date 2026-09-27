@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { connection } from "next/server";
 import { profile } from "@/content/site";
@@ -42,6 +42,14 @@ export const metadata: Metadata = {
     title,
     description,
   },
+};
+
+// Browser chrome (mobile address bar etc.) matches the page background in each color scheme.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

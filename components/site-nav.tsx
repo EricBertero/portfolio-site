@@ -2,20 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, m, useMotionValueEvent, useScroll } from "motion/react";
-import { profile, resume } from "@/content/site";
+import { navSections, profile, resume } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/ui/icons";
 import { EASE_OUT_EXPO } from "@/components/ui/reveal";
 import { cn } from "@/lib/cn";
 
-const NAV_LINKS = [
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "certifications", label: "Certifications" },
-  { id: "contact", label: "Contact" },
-] as const;
+const NAV_LINKS = navSections;
 
 /** Scroll distance (px) before the bar starts hiding on scroll-down. */
 const HIDE_AFTER = 240;
@@ -154,8 +147,10 @@ export function SiteNav() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-500",
           solid && !menuOpen
-            ? "border-white/10 bg-background/80 backdrop-blur-md"
+            ? "border-line bg-background/80 backdrop-blur-md"
             : "border-transparent bg-transparent",
+          // Over the always-dark hero, the bar's text uses the dark tokens even in light mode.
+          !solid && !menuOpen && "theme-dark",
         )}
       >
         <Container className="flex h-16 items-center justify-between gap-6">
@@ -180,7 +175,7 @@ export function SiteNav() {
                       aria-current={active ? "true" : undefined}
                       className={cn(
                         "inline-flex min-h-11 items-center rounded-full px-3 transition-colors",
-                        active ? "text-foreground" : "text-zinc-400 hover:text-foreground",
+                        active ? "text-foreground" : "text-muted hover:text-foreground",
                       )}
                     >
                       {label}
@@ -203,7 +198,7 @@ export function SiteNav() {
             <a
               href={resume.href}
               download={resume.filename}
-              className="hidden min-h-10 items-center gap-2 rounded-full border border-white/15 px-4 text-sm font-medium text-foreground transition-colors hover:border-brand hover:text-brand-text md:inline-flex"
+              className="hidden min-h-10 items-center gap-2 rounded-full border border-line-strong px-4 text-sm font-medium text-foreground transition-colors hover:border-brand hover:text-brand-text md:inline-flex"
             >
               <DownloadIcon className="h-4 w-4" aria-hidden="true" />
               Resume
@@ -247,7 +242,7 @@ export function SiteNav() {
               {NAV_LINKS.map(({ id, label }, index) => (
                 <m.li
                   key={id}
-                  className="border-b border-white/10"
+                  className="border-b border-line"
                   variants={{
                     hidden: { opacity: 0, y: 24 },
                     shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT_EXPO } },

@@ -6,7 +6,7 @@ import { CertificationGrid } from "@/components/certification-grid";
 
 export default function CertificationsSection() {
   return (
-    <section id="certifications" className="border-t border-white/5 py-24 sm:py-32">
+    <section id="certifications" className="border-t border-line/50 py-24 sm:py-32">
       <Container className="flex flex-col gap-12">
         <Reveal>
           <SectionHeading title="Certifications" description={sectionIntros.certifications} />

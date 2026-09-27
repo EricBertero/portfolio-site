@@ -14,7 +14,7 @@ export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
 
   return (
     <ol ref={listRef} className="relative flex flex-col gap-16">
-      <span aria-hidden="true" className="absolute top-2 bottom-2 left-[7px] w-px bg-white/10" />
+      <span aria-hidden="true" className="absolute top-2 bottom-2 left-[7px] w-px bg-line" />
       <m.span
         aria-hidden="true"
         className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-brand"
@@ -43,13 +43,13 @@ function TimelineItem({ item }: { item: ExperienceItem }) {
         aria-hidden="true"
         className={cn(
           "relative z-10 mt-1.5 h-[15px] w-[15px] rounded-full border-2 transition-colors duration-500",
-          reached ? "border-brand bg-brand ring-4 ring-brand/15" : "border-zinc-600 bg-background",
+          reached ? "border-brand bg-brand ring-4 ring-brand/15" : "border-faint bg-background",
         )}
       />
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm text-zinc-400 tabular-nums">
+          <p className="text-sm text-muted tabular-nums">
             {item.periods.map((period, index) => (
               <span key={period}>
                 {index > 0 ? <span aria-hidden="true"> · </span> : null}
@@ -58,9 +58,9 @@ function TimelineItem({ item }: { item: ExperienceItem }) {
             ))}
           </p>
           <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{item.role}</h3>
-          <p className="text-base text-zinc-300">
+          <p className="text-base text-soft">
             {item.company}
-            <span className="text-zinc-400">
+            <span className="text-muted">
               {" "}
               · {item.location}
               {item.team ? ` · ${item.team}` : ""}
@@ -68,10 +68,10 @@ function TimelineItem({ item }: { item: ExperienceItem }) {
           </p>
         </div>
 
-        <ul className="flex flex-col gap-3 text-sm leading-6 text-zinc-400">
+        <ul className="flex flex-col gap-3 text-sm leading-6 text-muted">
           {item.highlights.map((highlight) => (
             <li key={highlight} className="grid grid-cols-[0.75rem_minmax(0,1fr)] gap-2">
-              <span aria-hidden="true" className="mt-2.5 h-px w-3 bg-zinc-600" />
+              <span aria-hidden="true" className="mt-2.5 h-px w-3 bg-faint" />
               {highlight}
             </li>
           ))}
@@ -79,7 +79,7 @@ function TimelineItem({ item }: { item: ExperienceItem }) {
 
         <ul aria-label={`${item.company} tools and focus areas`} className="flex flex-wrap gap-2">
           {item.tags.map((tag) => (
-            <li key={tag} className="rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-300">
+            <li key={tag} className="rounded-full border border-line px-3 py-1 text-xs text-soft">
               {tag}
             </li>
           ))}

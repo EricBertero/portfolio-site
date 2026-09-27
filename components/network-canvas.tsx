@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { PauseIcon, PlayIcon } from "@/components/ui/icons";
+import { cn } from "@/lib/cn";
 
 interface Node3D {
   x: number;
@@ -62,21 +64,42 @@ function clamp(value: number, min: number, max: number) {
 /**
  * A sphere of network nodes with crimson packets travelling its links. Idles in a slow
  * auto-rotation and can be grabbed and spun with the mouse or a finger, flinging on
- * release. Decorative (aria-hidden). Pauses off-screen; dragging still works under
+ * release. The canvas is decorative (aria-hidden). Pauses off-screen, and a visible Pause
+ * button stops the idle motion (WCAG 2.2.2). Dragging still works when paused or under
  * prefers-reduced-motion, but the idle spin and release momentum are switched off.
  */
 export function NetworkCanvas({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // The Pause button (WCAG 2.2.2) freezes the idle motion; the loop reads it through a ref.
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
+  const resumeRef = useRef<() => void>(() => {});
+
+  const togglePaused = () => {
+    const next = !paused;
+    pausedRef.current = next;
+    setPaused(next);
+    if (!next) resumeRef.current();
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return undefined;
 
-    const styles = getComputedStyle(document.documentElement);
-    const lineColour = styles.getPropertyValue("--foreground").trim() || "white";
-    const brandColour = styles.getPropertyValue("--color-brand").trim() || "crimson";
+    // Colors come from the theme tokens, re-read if the system color scheme changes.
+    let lineColour = "white";
+    let brandColour = "crimson";
+    const readColours = () => {
+      const styles = getComputedStyle(document.documentElement);
+      lineColour = styles.getPropertyValue("--foreground").trim() || lineColour;
+      brandColour = styles.getPropertyValue("--color-brand").trim() || brandColour;
+    };
+    readColours();
+    const colorScheme = window.matchMedia("(prefers-color-scheme: light)");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // No idle motion under reduced motion or while paused; dragging still works either way.
+    const still = () => reduceMotion.matches || pausedRef.current;
 
     const nodes = fibonacciSphere(NODE_COUNT);
     const edges = nearestEdges(nodes, NEIGHBOURS);
@@ -170,7 +193,7 @@ export function NetworkCanvas({ className }: { className?: string }) {
       if (dragging) {
         // yaw/pitch already follow the pointer directly; nothing to integrate here.
       } else {
-        const spin = reduceMotion.matches ? 0 : BASE_SPIN;
+        const spin = still() ? 0 : BASE_SPIN;
         yaw += velYaw + spin * dt;
         pitch = clamp(pitch + velPitch, -MAX_PITCH, MAX_PITCH);
         velYaw *= MOMENTUM_DECAY;
@@ -179,7 +202,7 @@ export function NetworkCanvas({ className }: { className?: string }) {
         if (Math.abs(velPitch) < SETTLE_EPSILON) velPitch = 0;
       }
 
-      if (!reduceMotion.matches) {
+      if (!still()) {
         for (let i = packets.length - 1; i >= 0; i--) {
           packets[i].progress += dt * packets[i].speed;
           if (packets[i].progress >= 1) packets.splice(i, 1);
@@ -196,7 +219,7 @@ export function NetworkCanvas({ className }: { className?: string }) {
 
       draw();
 
-      const settled = !dragging && velYaw === 0 && velPitch === 0 && (reduceMotion.matches || !visible);
+      const settled = !dragging && velYaw === 0 && velPitch === 0 && (still() || !visible);
       frame = settled ? 0 : requestAnimationFrame(step);
     };
 
@@ -207,9 +230,10 @@ export function NetworkCanvas({ className }: { className?: string }) {
       }
     };
     const play = () => {
-      if (!visible || reduceMotion.matches) return;
+      if (!visible || still()) return;
       ensureRunning();
     };
+    resumeRef.current = play;
     const pause = () => {
       if (dragging) return;
       cancelAnimationFrame(frame);
@@ -272,7 +296,7 @@ export function NetworkCanvas({ className }: { className?: string }) {
         // Nothing to release.
       }
       canvas.style.cursor = "grab";
-      if (reduceMotion.matches) {
+      if (still()) {
         velYaw = 0;
         velPitch = 0;
         if (!visible) pause();
@@ -293,8 +317,14 @@ export function NetworkCanvas({ className }: { className?: string }) {
     });
     visibility.observe(canvas);
     reduceMotion.addEventListener("change", onMotionChange);
+    const onSchemeChange = () => {
+      readColours();
+      draw();
+    };
+    colorScheme.addEventListener("change", onSchemeChange);
 
     return () => {
+      colorScheme.removeEventListener("change", onSchemeChange);
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       visibility.disconnect();
@@ -307,10 +337,21 @@ export function NetworkCanvas({ className }: { className?: string }) {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className={`cursor-grab touch-none ${className ?? ""}`}
-    />
+    <div className={cn("relative", className)}>
+      <canvas ref={canvasRef} aria-hidden="true" className="block h-full w-full cursor-grab touch-none" />
+      {/* Nothing moves on its own under reduced motion, so there's nothing to pause there. */}
+      <button
+        type="button"
+        onClick={togglePaused}
+        className="absolute right-0 bottom-0 inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-background/80 px-4 text-xs font-medium text-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground motion-reduce:hidden"
+      >
+        {paused ? (
+          <PlayIcon className="h-3.5 w-3.5" aria-hidden="true" />
+        ) : (
+          <PauseIcon className="h-3.5 w-3.5" aria-hidden="true" />
+        )}
+        {paused ? "Resume animation" : "Pause animation"}
+      </button>
+    </div>
   );
 }

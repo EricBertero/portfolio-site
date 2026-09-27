@@ -9,12 +9,12 @@ import { cn } from "@/lib/cn";
 const FIELD_ORDER: ContactField[] = ["name", "email", "message"];
 
 const INPUT_CLASSES =
-  "w-full rounded-lg border bg-zinc-900/40 px-4 py-3 text-base text-foreground transition-[border-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/70";
+  "w-full rounded-lg border bg-surface px-4 py-3 text-base text-foreground transition-[border-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/70";
 
 function FieldError({ id, errors }: { id: string; errors?: string[] }) {
   if (!errors?.length) return null;
   return (
-    <p id={id} className="mt-2 flex items-start gap-1.5 text-sm text-red-400">
+    <p id={id} className="mt-2 flex items-start gap-1.5 text-sm text-danger">
       <AlertIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
       <span>
         <span className="sr-only">Error: </span>
@@ -82,7 +82,7 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
   };
 
   const fieldClasses = (field: ContactField) =>
-    cn(INPUT_CLASSES, errors[field] ? "border-red-400" : "border-zinc-500 hover:border-zinc-400");
+    cn(INPUT_CLASSES, errors[field] ? "border-danger" : "border-faint hover:border-muted");
 
   const describedBy = (...ids: Array<string | false>) => ids.filter(Boolean).join(" ") || undefined;
 
@@ -100,7 +100,7 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
         >
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-zinc-300">
+              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-soft">
                 Name
               </label>
               <input
@@ -123,7 +123,7 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
             </div>
 
             <div>
-              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-zinc-300">
+              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-soft">
                 Email
               </label>
               <input
@@ -147,7 +147,7 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-zinc-300">
+            <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-soft">
               Message
             </label>
             <textarea
@@ -172,7 +172,7 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
             {errors.message ? (
               <FieldError id="contact-message-error" errors={errors.message} />
             ) : (
-              <p id="contact-message-hint" className="mt-2 text-sm text-zinc-400">
+              <p id="contact-message-hint" className="mt-2 text-sm text-muted">
                 At least 10 characters.
               </p>
             )}
@@ -208,18 +208,18 @@ export function ContactForm({ successHeading, successMessage }: ContactFormProps
               <CheckCircleIcon aria-hidden="true" className="h-5 w-5 text-emerald-400" />
               {successHeading}
             </h3>
-            <p className="mt-2 text-sm text-zinc-300">{successMessage}</p>
+            <p className="mt-2 text-sm text-soft">{successMessage}</p>
             <Button className="mt-5" onClick={() => setDismissedSuccess(state)}>
               Send another message
             </Button>
           </div>
         ) : failed?.error && !pending ? (
-          <p className="flex items-start gap-1.5 text-sm text-red-400">
+          <p className="flex items-start gap-1.5 text-sm text-danger">
             <AlertIcon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{failed.error}</span>
           </p>
         ) : errorCount > 0 ? (
-          <p className="text-sm text-red-400">
+          <p className="text-sm text-danger">
             {errorCount === 1
               ? "Please fix the highlighted field."
               : `Please fix the ${errorCount} highlighted fields.`}

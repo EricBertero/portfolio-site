@@ -18,7 +18,7 @@ export function SectionHeading({ title, description, align = "left", className }
       )}
     >
       <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{title}</h2>
-      {description ? <p className="max-w-2xl text-base leading-7 text-zinc-400">{description}</p> : null}
+      {description ? <p className="max-w-2xl text-base leading-7 text-muted">{description}</p> : null}
     </div>
   );
 }

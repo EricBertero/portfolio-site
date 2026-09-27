@@ -14,9 +14,11 @@ export interface SocialLink {
   icon: SocialIconName;
 }
 
-/** Tools with a CC0 logo in `simple-icons`; see components/ui/tool-icons.ts. */
+/** Tools with an openly licensed glyph; see components/ui/tool-icons.tsx. */
 export type ToolIconKey =
   | "authentik"
+  | "azure"
+  | "azuredevops"
   | "bash"
   | "cloudflare"
   | "docker"
@@ -31,13 +33,22 @@ export type ToolIconKey =
   | "sumologic"
   | "tailscale"
   | "ubuntu"
+  | "windows"
   | "wireguard"
   | "zoho";
 
+/**
+ * A tile in the skill stack. It shows, in order of preference: `logo` (an official SVG file),
+ * `icon` (a bundled glyph), or the name as a wordmark. The tile is filled with `color`, or
+ * the icon's own brand color when `color` is omitted.
+ */
 export interface SkillBadge {
   name: string;
-  /** Omit when the tool has no public logo; the tile falls back to a wordmark. */
   icon?: ToolIconKey;
+  /** Brand color as `#rrggbb`; required when there's no `icon`. */
+  color?: string;
+  /** Path to an official logo SVG under /public, e.g. "/logos/crowdstrike.svg". */
+  logo?: string;
 }
 
 export interface SkillCategory {
@@ -45,7 +56,10 @@ export interface SkillCategory {
   title: string;
   summary: string;
   groups: { title: string; items: string[] }[];
-  /** Tools shown as tiles in the skill stack grid. */
+  /**
+   * Tools shown as tiles in the skill stack grid. A `// TODO: logo` badge is a brand-color
+   * wordmark until an official SVG is added under /public/logos and set as its `logo`.
+   */
   badges: SkillBadge[];
 }
 
@@ -193,9 +207,9 @@ export const skillCategories: SkillCategory[] = [
       },
     ],
     badges: [
-      { name: "ServiceNow" },
+      { name: "ServiceNow", color: "#62D84E" }, // TODO: logo
       { name: "Zoho Desk", icon: "zoho" },
-      { name: "Windows" },
+      { name: "Windows", icon: "windows" },
       { name: "Ubuntu", icon: "ubuntu" },
       { name: "Linux", icon: "linux" },
     ],
@@ -212,9 +226,9 @@ export const skillCategories: SkillCategory[] = [
       { title: "Virtualization, Storage & Containers", items: ["Proxmox VE", "Docker", "RAID configuration"] },
     ],
     badges: [
-      { name: "Active Directory" },
-      { name: "Entra ID" },
-      { name: "Intune" },
+      { name: "Active Directory", color: "#0078D4" }, // TODO: logo
+      { name: "Entra ID", color: "#0078D4" }, // TODO: logo
+      { name: "Intune", color: "#0078D4" }, // TODO: logo
       { name: "Authentik", icon: "authentik" },
       { name: "Proxmox", icon: "proxmox" },
       { name: "Docker", icon: "docker" },
@@ -237,7 +251,7 @@ export const skillCategories: SkillCategory[] = [
       },
     ],
     badges: [
-      { name: "Azure" },
+      { name: "Azure", icon: "azure" },
       { name: "Cloudflare", icon: "cloudflare" },
       { name: "WireGuard", icon: "wireguard" },
       { name: "Tailscale", icon: "tailscale" },
@@ -268,12 +282,12 @@ export const skillCategories: SkillCategory[] = [
       },
     ],
     badges: [
-      { name: "CrowdStrike" },
+      { name: "CrowdStrike", color: "#EC0000" }, // TODO: logo
       { name: "Splunk", icon: "splunk" },
       { name: "Sumo Logic", icon: "sumologic" },
-      { name: "Tenable" },
-      { name: "Mimecast" },
-      { name: "FlareVM" },
+      { name: "Tenable", color: "#E7FF00" }, // TODO: logo
+      { name: "Mimecast", color: "#000129" }, // TODO: logo
+      { name: "FlareVM", color: "#1AE86A" }, // TODO: logo
     ],
   },
   {
@@ -289,10 +303,20 @@ export const skillCategories: SkillCategory[] = [
       { name: "Python", icon: "python" },
       { name: "Bash", icon: "bash" },
       { name: "n8n", icon: "n8n" },
-      { name: "Azure DevOps" },
+      { name: "Azure DevOps", icon: "azuredevops" },
     ],
   },
 ];
+
+/** Page sections in order, as linked from the nav and the footer (ids match the section anchors). */
+export const navSections = [
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
+  { id: "certifications", label: "Certifications" },
+  { id: "contact", label: "Contact" },
+] as const;
 
 /** Intro line under each section heading. */
 export const sectionIntros = {

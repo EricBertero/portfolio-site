@@ -7,7 +7,7 @@ import { NetworkCanvas } from "@/components/network-canvas";
 
 export default function ExperienceSection() {
   return (
-    <section id="experience" className="border-t border-white/5 py-24 sm:py-32">
+    <section id="experience" className="border-t border-line/50 py-24 sm:py-32">
       <Container className="grid gap-12 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-16">
         <Reveal className="lg:col-span-7">
           <SectionHeading title="Experience" description={sectionIntros.experience} />

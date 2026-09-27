@@ -35,7 +35,7 @@ function CertificationCard({ cert }: { cert: Certification }) {
           className="h-[72px] w-[72px] object-contain"
         />
       ) : (
-        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-white/10 bg-zinc-900">
+        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-line bg-surface-2">
           {issuerInitial ? (
             <span className="text-xl font-semibold text-brand-text" aria-hidden="true">
               {issuerInitial}
@@ -47,7 +47,7 @@ function CertificationCard({ cert }: { cert: Certification }) {
       )}
 
       <p className="mt-4 font-semibold text-foreground">{cert.name}</p>
-      <p className="mt-1 text-sm text-zinc-400">
+      <p className="mt-1 text-sm text-muted">
         {cert.issuer}
         {!cert.inProgress && cert.year ? ` · ${cert.year}` : ""}
       </p>
@@ -65,8 +65,8 @@ function CertificationCard({ cert }: { cert: Certification }) {
             Verified
           </span>
           {cert.verifyCode ? (
-            <span className="text-zinc-400">
-              Code <span className="font-mono text-zinc-300">{cert.verifyCode}</span>
+            <span className="text-muted">
+              Code <span className="font-mono text-soft">{cert.verifyCode}</span>
             </span>
           ) : null}
         </p>
@@ -75,14 +75,14 @@ function CertificationCard({ cert }: { cert: Certification }) {
   );
 
   const cardClasses = cn(
-    "flex w-full flex-col rounded-xl border border-white/10 bg-zinc-900/40 p-6",
+    "flex w-full flex-col rounded-xl border border-line bg-surface p-6",
     clickable
       ? cn(
           "transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-brand/40",
           "motion-safe:hover:-translate-y-1 motion-safe:hover:-rotate-1",
           "hover:shadow-[0_12px_32px_-12px] hover:shadow-brand/50",
         )
-      : "transition-colors duration-300 hover:border-white/20",
+      : "transition-colors duration-300 hover:border-line-strong",
   );
 
   if (cert.verifyUrl) {

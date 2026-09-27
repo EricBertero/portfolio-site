@@ -1,5 +1,6 @@
+import Image from "next/image";
 import type { SkillBadge } from "@/content/site";
-import { readableOn, tileBackground, ToolIcon, withAlpha } from "@/components/ui/tool-icons";
+import { readableOn, toolHex, ToolIcon } from "@/components/ui/tool-icons";
 import { cn } from "@/lib/cn";
 
 export interface TileBadge extends SkillBadge {
@@ -11,18 +12,29 @@ interface SkillTileGridProps {
   activeCategory: string | null;
 }
 
+/** "CrowdStrike" → "CS", "Active Directory" → "AD", "FlareVM" → "FV", "Intune" → "In". */
+function monogram(name: string): string {
+  const parts = name.split(/\s+|(?=[A-Z])/).filter(Boolean);
+  return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : name.slice(0, 2);
+}
+
 /**
- * Every tool as its own colored tile — the icon's real brand color, or a plain wordmark
- * tile for the handful of vendors with no public logo. Selecting a category in the
- * accordion lights up its tiles and dims the rest; with none selected, every tile is lit.
+ * Every tool as a tile in its real brand color, captioned with its name. The tile shows the
+ * official logo when one is supplied, else the bundled glyph, else a monogram. Selecting a
+ * category in the accordion lights up its tiles and dims the rest; with none selected,
+ * every tile is lit.
  */
 export function SkillTileGrid({ badges, activeCategory }: SkillTileGridProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-5 sm:p-6">
-      <p className="mb-5 text-xs font-medium tracking-[0.2em] text-zinc-500 uppercase">Skill stack</p>
-      <ul className="flex flex-wrap gap-3">
+    <div className="rounded-2xl border border-line bg-surface p-5 sm:p-6">
+      <p className="mb-5 text-xs font-medium tracking-[0.2em] text-muted uppercase">Skill stack</p>
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-x-2 gap-y-4">
         {badges.map((badge) => (
-          <SkillTile key={`${badge.categoryId}-${badge.name}`} badge={badge} lit={activeCategory === null || badge.categoryId === activeCategory} />
+          <SkillTile
+            key={`${badge.categoryId}-${badge.name}`}
+            badge={badge}
+            lit={activeCategory === null || badge.categoryId === activeCategory}
+          />
         ))}
       </ul>
     </div>
@@ -30,30 +42,28 @@ export function SkillTileGrid({ badges, activeCategory }: SkillTileGridProps) {
 }
 
 function SkillTile({ badge, lit }: { badge: TileBadge; lit: boolean }) {
-  const background = badge.icon ? tileBackground(badge.icon) : "#27272a";
+  const background = badge.color ?? (badge.icon ? toolHex(badge.icon) : "#ffffff");
   const foreground = readableOn(background);
 
   return (
-    <li
-      style={{
-        backgroundColor: background,
-        color: foreground,
-        boxShadow: lit ? `0 10px 24px -10px ${withAlpha(background, 0.65)}` : undefined,
-      }}
-      className={cn(
-        "flex items-center justify-center rounded-2xl border border-white/10 transition-[opacity,box-shadow,transform] duration-500 ease-out",
-        badge.icon ? "h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem]" : "h-16 px-4 sm:h-[4.5rem]",
-        lit ? "opacity-100 motion-safe:scale-100" : "opacity-25 motion-safe:scale-[0.96]",
-      )}
-    >
-      <span className="sr-only">{badge.name}</span>
-      {badge.icon ? (
-        <ToolIcon name={badge.icon} className="h-7 w-7 sm:h-8 sm:w-8" style={{ color: foreground }} />
-      ) : (
-        <span aria-hidden="true" className="text-center text-xs leading-tight font-semibold text-balance">
-          {badge.name}
-        </span>
-      )}
+    <li className="flex flex-col items-center gap-2 text-center">
+      <span
+        aria-hidden="true"
+        style={{ backgroundColor: background, color: foreground }}
+        className={cn(
+          "flex h-12 w-12 items-center justify-center rounded-xl border border-line transition-[opacity,transform] duration-500 ease-out sm:h-14 sm:w-14 sm:rounded-2xl",
+          lit ? "opacity-100 motion-safe:scale-100" : "opacity-25 motion-safe:scale-[0.94]",
+        )}
+      >
+        {badge.logo ? (
+          <Image src={badge.logo} alt="" width={28} height={28} unoptimized className="h-7 w-7 object-contain" />
+        ) : badge.icon ? (
+          <ToolIcon name={badge.icon} className="h-6 w-6 sm:h-7 sm:w-7" />
+        ) : (
+          <span className="text-sm font-bold tracking-tight sm:text-base">{monogram(badge.name)}</span>
+        )}
+      </span>
+      <span className="text-xs leading-tight text-balance text-muted">{badge.name}</span>
     </li>
   );
 }
