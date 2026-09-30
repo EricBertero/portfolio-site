@@ -76,3 +76,33 @@ body {
     scroll-behavior: smooth;
   }
 }
+
+/*
+ * Verdict scale for the Phishing Email Analyzer page: the same one the analyzer's own dashboard
+ * uses. A calm neutral for Clean and Low, then the brand's two reds for threats, brighter as
+ * they get more severe on the dark page and darker on the light one. Built from the kit's
+ * --palette-* values, which exist for charts like this; components use it through
+ * `bg-(--verdict-critical)` and friends, next to a text label, never on its own.
+ */
+:root,
+.theme-dark {
+  --verdict-clean: var(--faint);
+  --verdict-suspicious: var(--palette-red-700);
+  --verdict-high: color-mix(in srgb, var(--palette-red-400) 50%, var(--palette-red-700));
+  --verdict-critical: var(--palette-red-400);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --verdict-suspicious: color-mix(in srgb, var(--palette-red-400) 80%, var(--palette-red-700));
+    --verdict-critical: var(--palette-red-700);
+  }
+}
+
+/* Captions on the self-hosted demo video, in the same slim style as the video's own subtitles. */
+video::cue {
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  color: var(--palette-neutral-150);
+  background-color: color-mix(in srgb, var(--palette-neutral-950) 80%, transparent);
+}

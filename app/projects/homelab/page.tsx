@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { homelab, runningServiceCount } from "@/content/homelab";
-import { profile } from "@/content/site";
+import { JsonLd, PERSON_ID, absoluteUrl, personNode, projectBreadcrumb, projectMetadata } from "@/lib/seo";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { Container } from "@/components/ui/container";
@@ -13,16 +13,25 @@ import { TopologyDiagram } from "@/components/homelab/topology-diagram";
 import { HardwareTable } from "@/components/homelab/hardware-table";
 import { ServiceGroups } from "@/components/homelab/service-groups";
 
-const title = `${homelab.title} — ${profile.name}`;
 const path = "/projects/homelab";
 
-export const metadata: Metadata = {
-  title,
-  description: homelab.summary,
-  alternates: { canonical: path },
-  openGraph: { type: "article", url: path, siteName: profile.name, title, description: homelab.summary },
-  twitter: { card: "summary_large_image", title, description: homelab.summary },
-};
+export const metadata: Metadata = projectMetadata(path, homelab.seo);
+
+const graph = [
+  {
+    "@type": "TechArticle",
+    "@id": absoluteUrl(`${path}#article`),
+    url: absoluteUrl(path),
+    headline: homelab.seo.title,
+    description: homelab.seo.description,
+    keywords: homelab.seo.keywords.join(", "),
+    image: absoluteUrl(`${path}/opengraph-image`),
+    inLanguage: "en",
+    author: { "@id": PERSON_ID },
+  },
+  personNode(),
+  projectBreadcrumb(path, homelab.title),
+];
 
 const SECTIONS = [
   { id: "topology", label: "Topology" },
@@ -47,6 +56,7 @@ function Marker() {
 export default function HomelabPage() {
   return (
     <>
+      <JsonLd graph={graph} />
       <SiteNav home={false} />
       <main id="main-content" className="flex flex-1 flex-col">
         <header className="pt-28 sm:pt-36">

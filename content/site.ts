@@ -153,6 +153,18 @@ export interface Profile {
   lead: string;
 }
 
+/**
+ * What search engines and link previews see for a page. `title` is the page's own part (the
+ * layout appends the name); keep it under ~60 characters with the name, and `description`
+ * under ~160, or search results cut them off. Six to ten `keywords`: the terms someone would
+ * actually search for, never a stuffed list.
+ */
+export interface PageSeo {
+  title: string;
+  description: string;
+  keywords: string[];
+}
+
 export const profile: Profile = {
   name: "Eric Bertero",
   title: "Junior Cybersecurity Analyst · Security Operations",
@@ -160,6 +172,23 @@ export const profile: Profile = {
     "Watching for threats, digging into what's actually going on, and closing the gaps before they turn into incidents.",
   location: "Oakville, ON",
   lead: "I'm a junior cybersecurity analyst who's happiest in the weeds of security operations: triaging alerts, investigating phishing attempts, tracking down vulnerabilities, and running SOC 2 access reviews.", // TODO: owner is rewording this
+};
+
+/** The home page in search results. Its title is used as is, with the name in front. */
+export const homeSeo: PageSeo = {
+  title: "Junior Cybersecurity Analyst (SOC)",
+  description:
+    "Eric Bertero, junior cybersecurity analyst in Oakville, Ontario: SOC alert triage, phishing investigation, vulnerability management and security projects.",
+  keywords: [
+    "Eric Bertero",
+    "cybersecurity analyst",
+    "SOC analyst",
+    "security operations",
+    "phishing investigation",
+    "vulnerability management",
+    "Oakville Ontario",
+    "cybersecurity portfolio",
+  ],
 };
 
 export const hero: HeroContent = {

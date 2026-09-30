@@ -78,6 +78,19 @@ In the main dashboard for the domain:
   Rewrites**.
 - **Security → Bots:** enable **Bot Fight Mode**.
 - **Speed → Optimization:** enable **Brotli** compression.
+- **SSL/TLS → Edge Certificates:** set **Minimum TLS Version** to **TLS 1.2** and keep
+  **TLS 1.3** on.
+- **Security → WAF → Managed rules:** turn on the **Cloudflare Free Managed Ruleset**.
+- **Security → WAF → Rate limiting rules:** one rule for `POST` requests to `/` (the
+  contact form), e.g. 10 requests per 10 minutes per IP, then block. The app limits the
+  form too; this stops floods before they reach the tunnel.
+- **Security → WAF → Custom rules:** block any method other than `GET`, `HEAD` and `POST`
+  (`not http.request.method in {"GET" "HEAD" "POST"}` → Block). The app answers them with
+  405 anyway, but Node itself rejects `TRACE` with a bare 500 before the app sees it.
+- **DNS → Settings:** enable **DNSSEC** and add the DS record at your registrar.
+- **DNS → Records:** a **CAA** record limiting certificates to the authority Cloudflare
+  uses, and SPF, DKIM and DMARC records for the domain's email (Resend shows the DKIM
+  record to add); `p=reject` once mail is flowing cleanly, so nobody can spoof it.
 
 ## 6. Verify the isolation
 
@@ -99,6 +112,25 @@ docker compose up -d --build
 
 `--build` re-runs the Dockerfile, so a new image is built and the container replaced;
 `cloudflared` keeps the tunnel up throughout since it's a separate container.
+
+Rebuild at least once a year even without changes: `/.well-known/security.txt` is
+generated at build time and expires a year later.
+
+The `cloudflared` image is pinned to a version in `docker-compose.yml`. To update it,
+put the newest tag from Docker Hub there and run `docker compose up -d`.
+
+### Container hardening
+
+Both containers run with a read-only filesystem, every Linux capability dropped,
+`no-new-privileges`, and memory and process limits. The site's only writable places are
+in-memory: `/tmp` and Next's cache. To confirm after a deploy:
+
+```bash
+docker compose exec portfolio sh -c 'touch /app/test || echo read-only as expected'
+```
+
+If the site container ever fails to start with a read-only or permission error in
+`docker compose logs portfolio`, that is the setting to look at first.
 
 ## Logs
 

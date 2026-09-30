@@ -2,13 +2,13 @@ import type { PipelineStep } from "@/content/phishing-analyzer";
 
 /**
  * The scan pipeline as an ordered list: a vertical track on small screens, two rows of three on
- * wide ones. The numbers stay because the order is the point.
+ * wide ones. The track and the list order carry the sequence, so the steps aren't numbered.
  */
 export function Pipeline({ steps, after }: { steps: PipelineStep[]; after: string }) {
   return (
     <div className="flex flex-col gap-10">
       <ol className="grid lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
-        {steps.map((step, index) => (
+        {steps.map((step) => (
           <li
             key={step.name}
             className="relative border-l border-line pb-9 pl-7 last:border-l-transparent last:pb-0 lg:border-t lg:border-l-0 lg:pt-6 lg:pb-0 lg:pl-0 lg:last:border-l-0"
@@ -17,10 +17,7 @@ export function Pipeline({ steps, after }: { steps: PipelineStep[]; after: strin
               aria-hidden="true"
               className="absolute top-1.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-brand ring-4 ring-background lg:-top-[5px] lg:left-0"
             />
-            <p className="flex items-baseline gap-3">
-              <span className="text-sm text-muted tabular-nums">{String(index + 1).padStart(2, "0")}</span>
-              <span className="text-lg font-semibold tracking-tight text-foreground">{step.name}</span>
-            </p>
+            <h3 className="text-lg font-semibold tracking-tight text-foreground">{step.name}</h3>
             <p className="mt-2 max-w-[42ch] text-sm leading-6 text-muted">{step.detail}</p>
           </li>
         ))}

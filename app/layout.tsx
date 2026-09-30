@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { connection } from "next/server";
-import { profile } from "@/content/site";
+import { homeSeo, profile } from "@/content/site";
 import { MotionProvider } from "@/components/motion-provider";
 import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
@@ -16,17 +16,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const title = `${profile.name} — ${profile.title}`;
-const description = `${profile.title}${profile.location ? ` based in ${profile.location}` : ""}. ${profile.tagline}`;
+const title = `${profile.name} — ${homeSeo.title}`;
+const description = homeSeo.description;
 const [firstName, ...lastNames] = profile.name.split(" ");
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title,
+  // Project pages set their own title; the template adds the name after it.
+  title: { default: title, template: `%s — ${profile.name}` },
   description,
+  keywords: homeSeo.keywords,
+  applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl }],
+  creator: profile.name,
+  publisher: profile.name,
+  category: "technology",
   alternates: { canonical: "/" },
-  robots: { index: true, follow: true },
+  // Let search engines show full snippets and large image and video previews.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large", "max-video-preview": -1 },
+  },
+  // Stops mobile browsers turning numbers and addresses in the text into links.
+  formatDetection: { telephone: false, address: false, email: false },
   openGraph: {
     type: "profile",
     url: "/",

@@ -20,9 +20,14 @@ export type ContactResult =
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 60 * 60 * 1000;
 const submissionsByIp = new Map<string, number[]>();
+// Site-wide ceiling, so a bot rotating through many IPs still can't flood the inbox or burn the
+// Resend quota. Far above what a portfolio's genuine traffic sends in an hour.
+const GLOBAL_LIMIT = 30;
+let recentSubmissions: number[] = [];
 
 const SEND_FAILED = `Sorry, the message couldn't be sent. Please try again later, or email me at ${contact.email}.`;
 const RATE_LIMITED = `You've reached the limit of ${RATE_LIMIT} messages an hour. Please try again later, or email me at ${contact.email}.`;
+const BUSY = `The contact form is busy right now. Please try again in a while, or email me at ${contact.email}.`;
 
 const contactSchema = z.object({
   name: z
@@ -52,15 +57,22 @@ function field(formData: FormData, key: string): string {
   return typeof value === "string" ? value : "";
 }
 
-function isRateLimited(ip: string, now: number): boolean {
+/** Which limit, if any, this submission hits: the sender's own, or the site-wide one. */
+function rateLimit(ip: string, now: number): "sender" | "site" | null {
   const recent = (submissionsByIp.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  recentSubmissions = recentSubmissions.filter((t) => now - t < RATE_WINDOW_MS);
 
   if (recent.length >= RATE_LIMIT) {
     submissionsByIp.set(ip, recent);
-    return true;
+    return "sender";
+  }
+  if (recentSubmissions.length >= GLOBAL_LIMIT) {
+    console.warn("[contact] Site-wide hourly limit reached; message refused.");
+    return "site";
   }
 
   recent.push(now);
+  recentSubmissions.push(now);
   submissionsByIp.set(ip, recent);
 
   // Keep the map from growing without bound on a long-running server.
@@ -70,7 +82,7 @@ function isRateLimited(ip: string, now: number): boolean {
     }
   }
 
-  return false;
+  return null;
 }
 
 async function clientIp(): Promise<string> {
@@ -106,8 +118,9 @@ export async function sendContactMessage(
     return { ok: false, fieldErrors: z.flattenError(parsed.error).fieldErrors, values };
   }
 
-  if (isRateLimited(await clientIp(), Date.now())) {
-    return { ok: false, error: RATE_LIMITED, values };
+  const limited = rateLimit(await clientIp(), Date.now());
+  if (limited) {
+    return { ok: false, error: limited === "sender" ? RATE_LIMITED : BUSY, values };
   }
 
   const { name, email, message } = parsed.data;

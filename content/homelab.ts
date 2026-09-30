@@ -9,7 +9,7 @@
 // reasoning only. Never add IP addresses, subnets, VLAN IDs, hostnames, internal domain names,
 // port numbers or exact software versions here (see `omitted` below).
 
-import type { ToolIconKey } from "@/content/site";
+import type { PageSeo, ToolIconKey } from "@/content/site";
 
 export type NodeKind = "router" | "hypervisor";
 
@@ -79,6 +79,7 @@ export interface SecurityLayer {
 
 export interface HomelabContent {
   title: string;
+  seo: PageSeo;
   status: string;
   summary: string;
   intro: string;
@@ -97,6 +98,21 @@ export interface HomelabContent {
 
 export const homelab: HomelabContent = {
   title: "Homelab",
+  seo: {
+    title: "Zero-Trust Homelab with Proxmox and Cloudflare",
+    description:
+      "A four-node zero-trust homelab with no inbound ports: Proxmox VE, Docker, Cloudflare Tunnels, Tailscale and WireGuard, Authentik SSO and Pi-hole.",
+    keywords: [
+      "homelab",
+      "zero trust",
+      "Proxmox VE",
+      "Cloudflare Tunnel",
+      "Tailscale",
+      "WireGuard",
+      "self-hosted",
+      "Authentik",
+    ],
+  },
   status: "Ongoing",
   summary:
     "The physical infrastructure behind my other projects: a four-node, zero-trust homelab with no inbound ports exposed to the internet.",

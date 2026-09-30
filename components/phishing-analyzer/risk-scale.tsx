@@ -1,10 +1,23 @@
 import type { ExampleFinding, RiskLevel } from "@/content/phishing-analyzer";
 import { cn } from "@/lib/cn";
 
-// A ramp from the brand teal (safe) to the danger red (Critical), built from the semantic tokens
-// so it follows the theme. "Low" uses the lighter brand-text teal, because the brand teal at half
-// strength all but disappears on the dark page. Level names always sit next to it, never color alone.
-const LEVEL_FILL = ["bg-brand", "bg-brand-text/50", "bg-danger/45", "bg-danger/65", "bg-danger"];
+// The analyzer dashboard's verdict scale (defined in globals.css): neutral for mail that needs
+// nothing, the brand's reds for threats, so teal stays the page's one accent. Clean is a solid
+// neutral and Low an outlined one, as in the dashboard. Level names always sit next to it.
+const LEVEL_FILL = [
+  "bg-(--verdict-clean)",
+  "ring-1 ring-inset ring-(--verdict-clean)",
+  "bg-(--verdict-suspicious)",
+  "bg-(--verdict-high)",
+  "bg-(--verdict-critical)",
+];
+const LEVEL_DOT = [
+  "bg-(--verdict-clean)",
+  "ring-[1.5px] ring-inset ring-(--verdict-clean)",
+  "bg-(--verdict-suspicious)",
+  "bg-(--verdict-high)",
+  "bg-(--verdict-critical)",
+];
 
 /** The five risk levels: a proportional 0–100 bar, then what each level means. */
 export function RiskScale({ levels }: { levels: RiskLevel[] }) {
@@ -41,7 +54,7 @@ export function RiskScale({ levels }: { levels: RiskLevel[] }) {
               <tr key={level.name} className="border-b border-line">
                 <th scope="row" className="py-4 pr-6 font-medium text-foreground">
                   <span className="inline-flex items-center gap-3">
-                    <span aria-hidden="true" className={cn("h-2.5 w-2.5 rounded-full", LEVEL_FILL[index])} />
+                    <span aria-hidden="true" className={cn("h-2.5 w-2.5 rounded-full", LEVEL_DOT[index])} />
                     {level.name}
                   </span>
                 </th>
@@ -80,8 +93,8 @@ export function ScoreExample({ subject, sender, findings, note }: ScoreExamplePr
         <p className="flex items-baseline gap-2">
           <span className="text-4xl font-semibold tracking-[-0.03em] text-foreground tabular-nums">{score}</span>
           <span className="text-sm text-muted">/ 100</span>
-          <span className="ml-2 inline-flex items-center gap-2 self-center rounded-full border border-danger/40 px-3 py-1 text-xs font-semibold text-foreground">
-            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-danger" />
+          <span className="ml-2 inline-flex items-center gap-2 self-center rounded-full border border-line-strong px-3 py-1 text-xs font-semibold text-foreground">
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-(--verdict-critical)" />
             Critical
           </span>
         </p>

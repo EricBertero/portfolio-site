@@ -1,28 +1,28 @@
 WEBVTT
 
-00:00:03.184 --> 00:00:10.110
+00:00:03.216 --> 00:00:10.187
 Every new email is scanned, scored 0–100 and labelled in Gmail
 
-00:00:10.110 --> 00:00:16.449
+00:00:10.187 --> 00:00:16.621
 Threats stand out at a glance
 
-00:00:16.449 --> 00:00:21.504
+00:00:16.621 --> 00:00:21.697
 Filter and search everything the scanner has seen
 
-00:00:21.504 --> 00:00:29.646
+00:00:21.697 --> 00:00:29.879
 Every point is explained: spoofed sender, fake domain, disguised link
 
-00:00:29.646 --> 00:00:32.166
+00:00:29.879 --> 00:00:32.443
 Critical emails get an incident report automatically
 
-00:00:32.166 --> 00:00:40.654
+00:00:32.443 --> 00:00:40.965
 HTML and PDF reports, with every indicator defanged
 
-00:00:44.001 --> 00:00:51.114
+00:00:44.366 --> 00:00:51.518
 Unknown attachments go to the sandbox only with your approval
 
-00:00:51.114 --> 00:00:55.444
+00:00:51.518 --> 00:00:55.917
 Or drop in any saved .eml to check it on demand
 
-00:00:55.444 --> 00:00:58.811
+00:00:55.917 --> 00:00:59.290
 A verdict in seconds, with the reasons

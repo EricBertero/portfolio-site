@@ -7,6 +7,8 @@
 // Every number and example here comes from the project itself (its scoring config, its test
 // suite and the demo dataset the video was recorded from). The example email is synthetic.
 
+import type { PageSeo } from "@/content/site";
+
 export interface PipelineStep {
   name: string;
   detail: string;
@@ -39,11 +41,20 @@ export interface DesignNote {
 
 export interface PhishingAnalyzerContent {
   title: string;
+  seo: PageSeo;
   status: string;
   summary: string;
   intro: string;
   facts: { label: string; value: string }[];
-  demo: { video: string; captions: string; poster: string; caption: string };
+  demo: {
+    video: string;
+    captions: string;
+    poster: string;
+    caption: string;
+    /** ISO duration and publish date, for the video's search listing. */
+    duration: string;
+    uploadDate: string;
+  };
   pipeline: PipelineStep[];
   /** What runs after the first verdict: the sandbox loop. */
   pipelineAfter: string;
@@ -61,6 +72,21 @@ export interface PhishingAnalyzerContent {
 
 export const phishingAnalyzer: PhishingAnalyzerContent = {
   title: "Phishing Email Analyzer",
+  seo: {
+    title: "Phishing Email Analyzer: Gmail Phishing Detection",
+    description:
+      "A Python service that scores every Gmail email for phishing from 0 to 100: SPF, DKIM and DMARC, links, attachments and threat intelligence, explained.",
+    keywords: [
+      "phishing email analyzer",
+      "phishing detection",
+      "email security",
+      "Gmail API",
+      "SPF DKIM DMARC",
+      "threat intelligence",
+      "VirusTotal",
+      "Python",
+    ],
+  },
   status: "In progress",
   summary:
     "A local service that watches a Gmail inbox, scores every new email for phishing from 0 to 100, labels it, and writes an incident report when it's Critical.",
@@ -78,6 +104,8 @@ export const phishingAnalyzer: PhishingAnalyzerContent = {
     poster: "/projects/phishing-analyzer/poster.jpg",
     caption:
       "A one-minute tour of the dashboard, recorded automatically with Playwright against generated demo data. No real mail appears on screen.",
+    duration: "PT1M",
+    uploadDate: "2026-09-30",
   },
   pipeline: [
     { name: "Watch", detail: "Polls Gmail's change history, so only new mail is fetched and a restart never rescans the inbox." },

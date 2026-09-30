@@ -21,18 +21,40 @@ services:
       - .env
     networks:
       - webnet
+    # Hardening: the filesystem is read-only apart from two in-memory scratch areas (Next's
+    # cache and /tmp), every Linux capability is dropped, the process can never gain
+    # privileges (setuid binaries do nothing), and memory and process counts are capped.
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+      - /app/.next/cache:size=256m,uid=1001,gid=1001,mode=0700
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    pids_limit: 256
 
   tunnel:
-    image: cloudflare/cloudflared:latest
+    # Pinned rather than `latest`, so an upstream release can't change what runs here
+    # unannounced. To update: pick the newest tag on Docker Hub, then `docker compose up -d`.
+    image: cloudflare/cloudflared:2026.9.3
     container_name: cloudflare-tunnel
     restart: unless-stopped
-    command: tunnel run
+    command: tunnel --no-autoupdate run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     networks:
       - webnet
     depends_on:
       - portfolio
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    pids_limit: 128
 
 networks:
   webnet:

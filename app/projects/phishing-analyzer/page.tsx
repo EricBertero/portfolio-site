@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { phishingAnalyzer as project } from "@/content/phishing-analyzer";
-import { profile } from "@/content/site";
+import { JsonLd, PERSON_ID, absoluteUrl, personNode, projectBreadcrumb, projectMetadata } from "@/lib/seo";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { Container } from "@/components/ui/container";
@@ -14,16 +14,37 @@ import { DemoVideo } from "@/components/phishing-analyzer/demo-video";
 import { Pipeline } from "@/components/phishing-analyzer/pipeline";
 import { RiskScale, ScoreExample } from "@/components/phishing-analyzer/risk-scale";
 
-const title = `${project.title} — ${profile.name}`;
 const path = "/projects/phishing-analyzer";
 
-export const metadata: Metadata = {
-  title,
-  description: project.summary,
-  alternates: { canonical: path },
-  openGraph: { type: "article", url: path, siteName: profile.name, title, description: project.summary },
-  twitter: { card: "summary_large_image", title, description: project.summary },
-};
+export const metadata: Metadata = projectMetadata(path, project.seo);
+
+const graph = [
+  {
+    "@type": "TechArticle",
+    "@id": absoluteUrl(`${path}#article`),
+    url: absoluteUrl(path),
+    headline: project.seo.title,
+    description: project.seo.description,
+    keywords: project.seo.keywords.join(", "),
+    image: absoluteUrl(`${path}/opengraph-image`),
+    inLanguage: "en",
+    author: { "@id": PERSON_ID },
+    video: { "@id": absoluteUrl(`${path}#demo`) },
+  },
+  {
+    "@type": "VideoObject",
+    "@id": absoluteUrl(`${path}#demo`),
+    name: `${project.title} demo`,
+    description: project.demo.caption,
+    thumbnailUrl: absoluteUrl(project.demo.poster),
+    contentUrl: absoluteUrl(project.demo.video),
+    uploadDate: project.demo.uploadDate,
+    duration: project.demo.duration,
+    inLanguage: "en",
+  },
+  personNode(),
+  projectBreadcrumb(path, project.title),
+];
 
 const SECTIONS = [
   { id: "demo", label: "Demo" },
@@ -45,6 +66,7 @@ function Marker() {
 export default function PhishingAnalyzerPage() {
   return (
     <>
+      <JsonLd graph={graph} />
       <SiteNav home={false} />
       <main id="main-content" className="flex flex-1 flex-col">
         <header className="pt-28 sm:pt-36">
