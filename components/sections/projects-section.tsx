@@ -1,8 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { cyberRange, projects, sectionIntros, type Project } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
+import { ArrowDownIcon } from "@/components/ui/icons";
+import { StackList, StatusLabel } from "@/components/ui/project-meta";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { YoutubeEmbed } from "@/components/youtube-embed";
 
@@ -11,22 +14,6 @@ const CASE_STUDY_BLOCKS = [
   { label: "Approach", text: cyberRange.approach },
   { label: "Outcome", text: cyberRange.outcome },
 ] as const;
-
-function StatusLabel({ status }: { status: string }) {
-  return <p className="text-xs font-semibold tracking-[0.2em] text-brand-text uppercase">{status}</p>;
-}
-
-function StackList({ stack, label }: { stack: string[]; label: string }) {
-  return (
-    <ul aria-label={label} className="flex flex-wrap gap-2">
-      {stack.map((tech) => (
-        <li key={tech} className="rounded-full border border-line px-3 py-1 text-xs text-soft">
-          {tech}
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export default function ProjectsSection() {
   return (
@@ -108,10 +95,22 @@ export default function ProjectsSection() {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="flex w-full flex-col gap-5 rounded-2xl border border-line bg-surface p-6 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-brand/40 hover:shadow-[0_16px_40px_-16px] hover:shadow-brand/40 motion-safe:hover:-translate-y-1 sm:p-8">
+    <article className="group relative flex w-full flex-col gap-5 rounded-2xl border border-line bg-surface p-6 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-brand/40 hover:shadow-[0_16px_40px_-16px] hover:shadow-brand/40 motion-safe:hover:-translate-y-1 sm:p-8">
       <div className="flex flex-col gap-3">
         <StatusLabel status={project.status} />
-        <h3 className="text-xl font-semibold tracking-tight text-foreground">{project.title}</h3>
+        <h3 className="text-xl font-semibold tracking-tight text-foreground">
+          {project.href ? (
+            // Stretched link: its ::after covers the card, so the whole card opens the write-up.
+            <Link
+              href={project.href}
+              className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
+            >
+              {project.title}
+            </Link>
+          ) : (
+            project.title
+          )}
+        </h3>
         <p className="text-sm leading-6 text-muted">{project.summary}</p>
       </div>
 
@@ -127,13 +126,22 @@ function ProjectCard({ project }: { project: Project }) {
       <div className="mt-auto flex flex-col gap-4 pt-2">
         <StackList stack={project.stack} label={`${project.title} tech stack`} />
         {project.links.length > 0 ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="relative z-10 flex flex-wrap gap-3">
             {project.links.map(({ label, href }) => (
               <Button key={label} href={href} external>
                 {label}
               </Button>
             ))}
           </div>
+        ) : null}
+        {project.href ? (
+          <p className="inline-flex items-center gap-2 text-sm font-medium text-brand-text">
+            View the full setup
+            <ArrowDownIcon
+              className="h-4 w-4 -rotate-90 transition-transform duration-300 motion-safe:group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+          </p>
         ) : null}
       </div>
     </article>

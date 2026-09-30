@@ -48,7 +48,7 @@ export function YoutubeEmbed({ youtubeId, poster, title }: YoutubeEmbedProps) {
               aria-label={`Play: ${title}`}
               className="group absolute inset-0 flex items-center justify-center bg-black/40 transition-colors hover:bg-black/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand text-white shadow-lg motion-safe:transition-transform motion-safe:group-hover:scale-105">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand text-on-brand shadow-lg motion-safe:transition-transform motion-safe:group-hover:scale-105">
                 <PlayIcon className="ml-1 h-6 w-6" />
               </span>
             </button>

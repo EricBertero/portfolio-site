@@ -5,7 +5,9 @@ import { ArrowDownIcon, SOCIAL_ICONS } from "@/components/ui/icons";
 const LINK_CLASSES =
   "inline-flex min-h-11 items-center rounded-md transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-export function SiteFooter() {
+/** `home` is false on pages other than the one-page home, where section links go back to it. */
+export function SiteFooter({ home = true }: { home?: boolean }) {
+  const base = home ? "" : "/";
   const year = new Date().getFullYear();
 
   return (
@@ -16,7 +18,7 @@ export function SiteFooter() {
             <ul className="flex flex-wrap gap-x-5 gap-y-1">
               {navSections.map(({ id, label }) => (
                 <li key={id}>
-                  <a href={`#${id}`} className={LINK_CLASSES}>
+                  <a href={`${base}#${id}`} className={LINK_CLASSES}>
                     {label}
                   </a>
                 </li>
@@ -24,7 +26,7 @@ export function SiteFooter() {
             </ul>
           </nav>
 
-          <a href="#home" className={`${LINK_CLASSES} group w-fit gap-2 text-soft`}>
+          <a href="#main-content" className={`${LINK_CLASSES} group w-fit gap-2 text-soft`}>
             <ArrowDownIcon
               className="h-4 w-4 rotate-180 transition-transform motion-safe:group-hover:-translate-y-0.5"
               aria-hidden="true"

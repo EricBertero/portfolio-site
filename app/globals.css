@@ -10,7 +10,12 @@
  *   faint   non-text only: input borders, markers (3:1+, below AA for text in dark mode)
  *   surface cards                        surface-2  inputs, tiles
  *   line    hairline borders             line-strong  control borders
- *   brand-text  crimson small text (AA on this mode's background)   danger  field errors
+ *   brand   fills, borders, rings, large text (3:1+ on this mode's background)
+ *   brand-text  small green text (AA on this mode's background)   danger  field errors
+ *   on-brand    text and icons on a solid brand fill
+ *
+ * The brand green is #52b788. White on it is only 2.5:1, so fills carry dark `on-brand` text,
+ * and light mode deepens the green (same family) so it still reads on a near-white page.
  */
 :root,
 .theme-dark {
@@ -23,8 +28,10 @@
   --surface-2: #27272a;
   --line: rgb(255 255 255 / 0.1);
   --line-strong: rgb(255 255 255 / 0.2);
-  /* Brand lifted just enough for small text to pass WCAG AA (5.0:1 on #0a0a0a). */
-  --brand-text: color-mix(in srgb, #ce4257 89%, white);
+  --brand: #52b788;
+  /* 7.9:1 on #0a0a0a, so small text needs no lift. */
+  --brand-text: #52b788;
+  --on-brand: #0a0a0a;
   --danger: #f87171;
 }
 
@@ -47,8 +54,10 @@
     --surface-2: #f4f4f5;
     --line: rgb(10 10 10 / 0.1);
     --line-strong: rgb(10 10 10 / 0.22);
-    /* Brand deepened for small text on a light page (~5.8:1 on #fafafa). */
-    --brand-text: color-mix(in srgb, #ce4257 85%, black);
+    /* Deeper greens from the same family: 3.7:1 for fills and rings, 6.1:1 for small text. */
+    --brand: #40916c;
+    --brand-text: #2d6a4f;
+    --on-brand: #0a0a0a;
     --danger: #b91c1c;
   }
 }
@@ -63,16 +72,15 @@
   --color-surface-2: var(--surface-2);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-brand: var(--brand);
   --color-brand-text: var(--brand-text);
+  --color-on-brand: var(--on-brand);
   --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @theme {
-  /* Fills, borders, rings and large display text. Small crimson text uses `brand-text`. */
-  --color-brand: #ce4257;
-
   /* Hero entrance (see hero-section.tsx). `both` holds the start frame through each delay. */
   --animate-hero-word: hero-word 1s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-hero-rise: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;

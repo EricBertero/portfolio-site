@@ -59,7 +59,7 @@ export function SkillCategories({ categories, activeId, onToggle }: SkillCategor
                     className={cn(
                       "flex h-8 w-8 items-center justify-center rounded-full border transition-colors duration-300",
                       open
-                        ? "border-brand bg-brand text-white"
+                        ? "border-brand bg-brand text-on-brand"
                         : "border-line-strong text-soft group-hover:border-brand",
                     )}
                   >

@@ -62,7 +62,7 @@ function clamp(value: number, min: number, max: number) {
 }
 
 /**
- * A sphere of network nodes with crimson packets travelling its links. Idles in a slow
+ * A sphere of network nodes with brand-colored packets travelling its links. Idles in a slow
  * auto-rotation and can be grabbed and spun with the mouse or a finger, flinging on
  * release. The canvas is decorative (aria-hidden). Pauses off-screen, and a visible Pause
  * button stops the idle motion (WCAG 2.2.2). Dragging still works when paused or under
@@ -89,11 +89,11 @@ export function NetworkCanvas({ className }: { className?: string }) {
 
     // Colors come from the theme tokens, re-read if the system color scheme changes.
     let lineColour = "white";
-    let brandColour = "crimson";
+    let brandColour = "#52b788";
     const readColours = () => {
       const styles = getComputedStyle(document.documentElement);
       lineColour = styles.getPropertyValue("--foreground").trim() || lineColour;
-      brandColour = styles.getPropertyValue("--color-brand").trim() || brandColour;
+      brandColour = styles.getPropertyValue("--brand").trim() || brandColour;
     };
     readColours();
     const colorScheme = window.matchMedia("(prefers-color-scheme: light)");

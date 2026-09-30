@@ -13,10 +13,19 @@ const NAV_LINKS = navSections;
 /** Scroll distance (px) before the bar starts hiding on scroll-down. */
 const HIDE_AFTER = 240;
 
-export function SiteNav() {
+interface SiteNavProps {
+  /**
+   * True on the one-page home. Elsewhere (e.g. /projects/homelab) there's no photo hero to sit
+   * over, so the bar is solid from the top and section links point back to the home page.
+   */
+  home?: boolean;
+}
+
+export function SiteNav({ home = true }: SiteNavProps) {
+  const base = home ? "" : "/";
   const [activeId, setActiveId] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [solid, setSolid] = useState(false);
+  const [solid, setSolid] = useState(!home);
   const [hidden, setHidden] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -39,7 +48,7 @@ export function SiteNav() {
   // Transparent over the hero, solid once past it; hide on scroll-down, show on scroll-up.
   useMotionValueEvent(scrollY, "change", (y) => {
     const heroHeight = document.getElementById("home")?.offsetHeight ?? 0;
-    setSolid(y > Math.max(heroHeight - 96, 32));
+    setSolid(!home || y > Math.max(heroHeight - 96, 32));
 
     const previous = scrollY.getPrevious() ?? 0;
     const focusInside = headerRef.current?.contains(document.activeElement) ?? false;
@@ -49,11 +58,12 @@ export function SiteNav() {
 
   // Highlight whichever section crosses the middle of the viewport (none while in the hero).
   useEffect(() => {
+    if (!home) return undefined;
     const ids = ["home", ...NAV_LINKS.map(({ id }) => id)];
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);
-    if (sections.length === 0) return;
+    if (sections.length === 0) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -67,7 +77,7 @@ export function SiteNav() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [home]);
 
   // Mobile overlay: lock page scroll, move focus in, close on Escape and return focus to the toggle.
   useEffect(() => {
@@ -127,7 +137,7 @@ export function SiteNav() {
     <>
       <a
         href="#main-content"
-        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-[60] focus-visible:rounded-md focus-visible:bg-brand focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-white"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-[60] focus-visible:rounded-md focus-visible:bg-brand focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-on-brand"
       >
         Skip to content
       </a>
@@ -150,12 +160,12 @@ export function SiteNav() {
             ? "border-line bg-background/80 backdrop-blur-md"
             : "border-transparent bg-transparent",
           // Over the always-dark hero, the bar's text uses the dark tokens even in light mode.
-          !solid && !menuOpen && "theme-dark",
+          home && !solid && !menuOpen && "theme-dark",
         )}
       >
         <Container className="flex h-16 items-center justify-between gap-6">
           <a
-            href="#home"
+            href={home ? "#home" : "/"}
             className="-mx-2 rounded-md px-2 py-2 text-sm font-semibold tracking-wide text-foreground transition-colors hover:text-brand-text"
           >
             {profile.name}
@@ -171,7 +181,7 @@ export function SiteNav() {
                       ref={(node) => {
                         linkRefs.current[id] = node;
                       }}
-                      href={`#${id}`}
+                      href={`${base}#${id}`}
                       aria-current={active ? "true" : undefined}
                       className={cn(
                         "inline-flex min-h-11 items-center rounded-full px-3 transition-colors",
@@ -250,7 +260,7 @@ export function SiteNav() {
                 >
                   <a
                     ref={index === 0 ? firstMobileLinkRef : undefined}
-                    href={`#${id}`}
+                    href={`${base}#${id}`}
                     aria-current={activeId === id ? "true" : undefined}
                     className={cn(
                       "flex min-h-16 items-center text-3xl font-semibold tracking-tight transition-colors",
@@ -267,7 +277,7 @@ export function SiteNav() {
             <a
               href={resume.href}
               download={resume.filename}
-              className="mt-10 inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-brand px-5 text-base font-medium text-white"
+              className="mt-10 inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-brand px-5 text-base font-medium text-on-brand"
             >
               <DownloadIcon className="h-5 w-5" aria-hidden="true" />
               Download resume

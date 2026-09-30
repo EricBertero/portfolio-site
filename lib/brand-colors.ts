@@ -3,6 +3,6 @@
 export const BRAND_COLORS = {
   background: "#0a0a0a",
   foreground: "#ededed",
-  brand: "#ce4257",
+  brand: "#52b788",
   muted: "#a1a1aa",
 } as const;

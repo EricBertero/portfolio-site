@@ -25,7 +25,7 @@ const BASE_CLASSES =
   "inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  solid: "bg-brand text-white hover:bg-brand/90",
+  solid: "bg-brand text-on-brand hover:bg-brand/90",
   outline: "border border-line text-foreground hover:border-brand hover:text-brand-text",
 };
 

@@ -5,7 +5,6 @@ import AboutSection from "@/components/sections/about-section";
 import SkillsSection from "@/components/sections/skills-section";
 import ProjectsSection from "@/components/sections/projects-section";
 import ExperienceSection from "@/components/sections/experience-section";
-import CertificationsSection from "@/components/sections/certifications-section";
 import ContactSection from "@/components/sections/contact-section";
 import { certifications, contact, profile, skillCategories, socials } from "@/content/site";
 import { siteUrl } from "@/lib/site-url";
@@ -46,7 +45,6 @@ export default function Home() {
         <SkillsSection />
         <ProjectsSection />
         <ExperienceSection />
-        <CertificationsSection />
         <ContactSection />
       </main>
       <SiteFooter />

@@ -91,6 +91,7 @@ export async function sendContactMessage(
 ): Promise<ContactResult> {
   // Honeypot: bots that fill the hidden field get a fake success and no signal.
   if (field(formData, "website") !== "") {
+    console.warn("[contact] Honeypot field was filled; message dropped.");
     return { ok: true };
   }
 
@@ -129,11 +130,13 @@ export async function sendContactMessage(
   }
 
   try {
-    const { error } = await new Resend(apiKey).emails.send({ from, to, replyTo: email, subject, text });
+    const { data, error } = await new Resend(apiKey).emails.send({ from, to, replyTo: email, subject, text });
     if (error) {
       console.error("[contact] Resend rejected the message:", error);
       return { ok: false, error: SEND_FAILED, values };
     }
+    // Resend accepted it; delivery status for this id is in the Resend dashboard under Emails.
+    console.info(`[contact] Accepted by Resend (id ${data?.id}).`);
   } catch (err) {
     console.error("[contact] Failed to send via Resend:", err);
     return { ok: false, error: SEND_FAILED, values };

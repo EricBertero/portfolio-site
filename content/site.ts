@@ -23,16 +23,22 @@ export type ToolIconKey =
   | "cloudflare"
   | "docker"
   | "linux"
+  | "microsoft"
   | "n8n"
+  | "nextcloud"
+  | "nextjs"
+  | "ollama"
   | "openwrt"
   | "paloalto"
   | "pihole"
+  | "portainer"
   | "proxmox"
   | "python"
   | "splunk"
   | "sumologic"
   | "tailscale"
   | "ubuntu"
+  | "vaultwarden"
   | "windows"
   | "wireguard"
   | "zoho";
@@ -63,11 +69,6 @@ export interface SkillCategory {
   badges: SkillBadge[];
 }
 
-export interface Fact {
-  label: string;
-  value: string;
-}
-
 export interface HeroContent {
   photo: string;
   photoAlt: string;
@@ -85,6 +86,8 @@ export interface Project {
   highlights: string[];
   stack: string[];
   links: ProjectLink[];
+  /** Internal page with the full write-up; makes the whole card a link to it. */
+  href?: string;
 }
 
 export interface ExperienceItem {
@@ -146,11 +149,8 @@ export interface Profile {
   title: string;
   tagline: string;
   location?: string;
-  /** Opening statement of the About section, set large. */
+  /** The About section's statement, set large above the certifications. */
   lead: string;
-  /** Bio paragraphs that follow the lead, rendered in order. */
-  bio: string[];
-  facts: Fact[];
 }
 
 export const profile: Profile = {
@@ -159,19 +159,7 @@ export const profile: Profile = {
   tagline:
     "Watching for threats, digging into what's actually going on, and closing the gaps before they turn into incidents.",
   location: "Oakville, ON",
-  lead: "I'm a junior cybersecurity analyst who's happiest in the weeds of security operations: triaging alerts, investigating phishing attempts, tracking down vulnerabilities, and running SOC 2 access reviews.",
-  bio: [
-    "I've worked hands-on with tools like CrowdStrike Falcon, Sumo Logic, and Tenable Nessus, and right now most of my time goes into Splunk, where I'm working through the certification track (Core Power User to Enterprise Certified Admin), along with Python for automating the repetitive parts of the job. Underneath all of that is a solid systems foundation: Windows Server, Linux, Active Directory, and Entra ID.",
-    "Outside of work, I run a self-hosted homelab: a four-node Proxmox and Docker setup locked down with Cloudflare Zero Trust, Tailscale, and WireGuard. Right now I'm building on top of it, an AI-driven cyber range that simulates a small company's IT environment, complete with a helpdesk and fake employees generating real support tickets, so I can practice detection and response against something that actually behaves like a live network.",
-    "What ties all of this together for me is a genuine interest in privacy, security, automation, and system administration. I like figuring out how systems work well enough to protect them, and stopping myself from doing the same task twice by hand.",
-    "Outside of tech, I'm usually planning my next trip or trying to get a new recipe right. Good food and new places are pretty much my other two hobbies.",
-  ],
-  facts: [
-    { label: "Based in", value: "Oakville, ON" },
-    { label: "Availability", value: "Full-time from January 2027" },
-    { label: "Education", value: "Advanced Diploma, Software Development & Network Engineering, Sheridan College, Dec 2026" },
-    { label: "Languages", value: "English, Italian" },
-  ],
+  lead: "I'm a junior cybersecurity analyst who's happiest in the weeds of security operations: triaging alerts, investigating phishing attempts, tracking down vulnerabilities, and running SOC 2 access reviews.", // TODO: owner is rewording this
 };
 
 export const hero: HeroContent = {
@@ -226,7 +214,7 @@ export const skillCategories: SkillCategory[] = [
       { title: "Virtualization, Storage & Containers", items: ["Proxmox VE", "Docker", "RAID configuration"] },
     ],
     badges: [
-      { name: "Active Directory", color: "#0078D4" }, // TODO: logo
+      { name: "Microsoft 365", icon: "microsoft" },
       { name: "Entra ID", color: "#0078D4" }, // TODO: logo
       { name: "Intune", color: "#0078D4" }, // TODO: logo
       { name: "Authentik", icon: "authentik" },
@@ -314,7 +302,6 @@ export const navSections = [
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
-  { id: "certifications", label: "Certifications" },
   { id: "contact", label: "Contact" },
 ] as const;
 
@@ -323,7 +310,6 @@ export const sectionIntros = {
   skills: "Five areas, from the service desk to the SOC. Open one to see the tools and skills behind it.",
   projects: "What I build outside of work to practise detection, response, and secure infrastructure.",
   experience: "Two co-op placements across IT support and security operations.",
-  certifications: "Badges and credentials, verified where available.",
 } as const;
 
 /** The skill category open when the page loads. */
@@ -371,6 +357,7 @@ export const projects: Project[] = [
     ],
     stack: ["Proxmox VE", "Docker", "Cloudflare Zero Trust", "OpenWrt", "Tailscale", "WireGuard", "Pi-hole"],
     links: [],
+    href: "/projects/homelab",
   },
   {
     title: "Phishing Email Analyzer",

@@ -153,3 +153,24 @@ export function BadgeIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** A rack server: two stacked units with status lights. */
+export function ServerIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" {...props}>
+      <rect x="3.75" y="4.5" width="16.5" height="6.5" rx="1.5" />
+      <rect x="3.75" y="13" width="16.5" height="6.5" rx="1.5" />
+      <path strokeLinecap="round" d="M7 7.75h.01M7 16.25h.01M10.5 7.75h6M10.5 16.25h6" />
+    </svg>
+  );
+}
+
+/** A router: a box with two antennas. */
+export function RouterIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" {...props}>
+      <rect x="3.75" y="12.5" width="16.5" height="7" rx="1.5" />
+      <path strokeLinecap="round" d="M7.5 12.5 6 5M16.5 12.5 18 5M7.5 16h.01M10.5 16h.01M14 16h3" />
+    </svg>
+  );
+}

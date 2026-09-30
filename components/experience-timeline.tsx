@@ -6,7 +6,7 @@ import type { ExperienceItem } from "@/content/site";
 import { EASE_OUT_EXPO } from "@/components/ui/reveal";
 import { cn } from "@/lib/cn";
 
-/** Vertical timeline whose crimson line fills as the reader scrolls through it. */
+/** Vertical timeline whose brand-colored line fills as the reader scrolls through it. */
 export function ExperienceTimeline({ items }: { items: ExperienceItem[] }) {
   const listRef = useRef<HTMLOListElement>(null);
   const reduceMotion = useReducedMotion();

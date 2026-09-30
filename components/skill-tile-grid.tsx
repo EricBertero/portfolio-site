@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { SkillBadge } from "@/content/site";
-import { readableOn, toolHex, ToolIcon } from "@/components/ui/tool-icons";
+import { monogram, readableOn, toolHex, ToolIcon } from "@/components/ui/tool-icons";
 import { cn } from "@/lib/cn";
 
 export interface TileBadge extends SkillBadge {
@@ -10,12 +10,6 @@ export interface TileBadge extends SkillBadge {
 interface SkillTileGridProps {
   badges: TileBadge[];
   activeCategory: string | null;
-}
-
-/** "CrowdStrike" → "CS", "Active Directory" → "AD", "FlareVM" → "FV", "Intune" → "In". */
-function monogram(name: string): string {
-  const parts = name.split(/\s+|(?=[A-Z])/).filter(Boolean);
-  return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : name.slice(0, 2);
 }
 
 /**
