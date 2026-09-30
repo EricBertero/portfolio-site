@@ -1,9 +1,10 @@
 import type { ExampleFinding, RiskLevel } from "@/content/phishing-analyzer";
 import { cn } from "@/lib/cn";
 
-// A ramp from the brand green (safe) to the danger red (Critical), built from the two semantic
-// tokens so it follows the theme. The level names always sit next to it, never color alone.
-const LEVEL_FILL = ["bg-brand", "bg-brand/45", "bg-danger/45", "bg-danger/65", "bg-danger"];
+// A ramp from the brand teal (safe) to the danger red (Critical), built from the semantic tokens
+// so it follows the theme. "Low" uses the lighter brand-text teal, because the brand teal at half
+// strength all but disappears on the dark page. Level names always sit next to it, never color alone.
+const LEVEL_FILL = ["bg-brand", "bg-brand-text/50", "bg-danger/45", "bg-danger/65", "bg-danger"];
 
 /** The five risk levels: a proportional 0–100 bar, then what each level means. */
 export function RiskScale({ levels }: { levels: RiskLevel[] }) {

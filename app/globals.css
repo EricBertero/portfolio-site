@@ -11,11 +11,12 @@
  *   surface cards                        surface-2  inputs, tiles
  *   line    hairline borders             line-strong  control borders
  *   brand   fills, borders, rings, large text (3:1+ on this mode's background)
- *   brand-text  small green text (AA on this mode's background)   danger  field errors
+ *   brand-text  small brand-colored text (AA on this mode's background)   danger  field errors
  *   on-brand    text and icons on a solid brand fill
  *
- * The brand green is #52b788. White on it is only 2.5:1, so fills carry dark `on-brand` text,
- * and light mode deepens the green (same family) so it still reads on a near-white page.
+ * The brand teal is #14746f in both modes. White on it is 5.6:1, so fills carry white
+ * `on-brand` text. On the near-black page it is 3.5:1: enough for fills, borders and rings,
+ * but small text there uses a lighter teal from the same family.
  */
 :root,
 .theme-dark {
@@ -28,10 +29,10 @@
   --surface-2: #27272a;
   --line: rgb(255 255 255 / 0.1);
   --line-strong: rgb(255 255 255 / 0.2);
-  --brand: #52b788;
-  /* 7.9:1 on #0a0a0a, so small text needs no lift. */
-  --brand-text: #52b788;
-  --on-brand: #0a0a0a;
+  --brand: #14746f;
+  /* 3.5:1 on #0a0a0a is below AA for small text, so it gets a lighter teal: 6.4:1. */
+  --brand-text: #2ea39b;
+  --on-brand: #ffffff;
   --danger: #f87171;
 }
 
@@ -54,10 +55,10 @@
     --surface-2: #f4f4f5;
     --line: rgb(10 10 10 / 0.1);
     --line-strong: rgb(10 10 10 / 0.22);
-    /* Deeper greens from the same family: 3.7:1 for fills and rings, 6.1:1 for small text. */
-    --brand: #40916c;
-    --brand-text: #2d6a4f;
-    --on-brand: #0a0a0a;
+    /* The teal itself reads on the near-white page: 5.4:1, enough for small text too. */
+    --brand: #14746f;
+    --brand-text: #14746f;
+    --on-brand: #ffffff;
     --danger: #b91c1c;
   }
 }

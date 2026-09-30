@@ -89,7 +89,7 @@ export function NetworkCanvas({ className }: { className?: string }) {
 
     // Colors come from the theme tokens, re-read if the system color scheme changes.
     let lineColour = "white";
-    let brandColour = "#52b788";
+    let brandColour = "#14746f";
     const readColours = () => {
       const styles = getComputedStyle(document.documentElement);
       lineColour = styles.getPropertyValue("--foreground").trim() || lineColour;
