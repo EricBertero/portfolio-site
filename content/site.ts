@@ -361,15 +361,17 @@ export const projects: Project[] = [
   },
   {
     title: "Phishing Email Analyzer",
-    status: "Complete",
-    summary: "A desktop tool that pulls messages from Gmail and scores how likely each one is to be phishing.",
+    status: "In progress",
+    summary:
+      "A local service that watches a Gmail inbox, scores every new email for phishing from 0 to 100, labels it, and writes an incident report when it's Critical.",
     highlights: [
-      "Tkinter GUI that ingests messages through the Gmail API and analyzes them automatically.",
-      "Header analysis (SPF, DKIM, DMARC) plus checks for social-engineering keywords, suspicious attachments, URL shorteners, and known-malicious links.",
-      "Weighted low / medium / high risk score to prioritize what gets reviewed first.",
+      "40+ checks across authentication (SPF, DKIM, DMARC), sender spoofing, wording, links and attachments, each explaining the points it adds.",
+      "Cross-checks links, IPs and attachment hashes against URLhaus, Spamhaus, AbuseIPDB and VirusTotal, with opt-in Hybrid Analysis sandboxing.",
+      "HTML/PDF incident reports with a Claude-written summary, and a local FastAPI dashboard locked down against DNS rebinding and CSRF.",
     ],
-    stack: ["Python", "Tkinter", "Gmail API"],
+    stack: ["Python", "Gmail API", "FastAPI", "SQLite", "Claude API", "VirusTotal"],
     links: [], // TODO: add a repo link if one becomes public
+    href: "/projects/phishing-analyzer",
   },
 ];
 
