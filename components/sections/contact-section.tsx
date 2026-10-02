@@ -5,7 +5,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { ContactForm } from "@/components/contact-form";
 
 export default function ContactSection() {
-  const linkedIn = socials.find((social) => social.icon === "linkedin");
+  // External profiles (LinkedIn, GitHub); email is already shown above them.
+  const profiles = socials.filter((social) => social.href.startsWith("https://"));
 
   return (
     <section id="contact" className="border-t border-line/50 py-24 sm:py-32">
@@ -33,16 +34,17 @@ export default function ContactSection() {
             >
               {contact.email}
             </a>
-            {linkedIn ? (
+            {profiles.map(({ label, href }) => (
               <a
-                href={linkedIn.href}
+                key={label}
+                href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-fit text-soft underline decoration-faint underline-offset-4 transition-colors hover:text-brand-text hover:decoration-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                {linkedIn.label}
+                {label}
               </a>
-            ) : null}
+            ))}
             <p className="mt-2 text-muted">{contact.responseTime}</p>
           </aside>
         </Reveal>

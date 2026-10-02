@@ -264,7 +264,10 @@ export const skillCategories: SkillCategory[] = [
       },
       {
         title: "Firewalls & Physical Infrastructure",
-        items: ["Next-generation firewall evaluation (Palo Alto)", "Structured cabling and server-rack installation"],
+        items: [
+          "Least-privilege enterprise firewall rules",
+          "Structured cabling and server-rack installation",
+        ],
       },
     ],
     badges: [
@@ -274,7 +277,6 @@ export const skillCategories: SkillCategory[] = [
       { name: "Tailscale", icon: "tailscale" },
       { name: "Pi-hole", icon: "pihole" },
       { name: "OpenWrt", icon: "openwrt" },
-      { name: "Palo Alto", icon: "paloalto" },
     ],
   },
   {
@@ -294,6 +296,8 @@ export const skillCategories: SkillCategory[] = [
           "Phishing investigation",
           "Email header analysis (SPF, DKIM, DMARC)",
           "Mimecast",
+          "KnowBe4",
+          "PhishER",
           "End-user security awareness training",
         ],
       },
@@ -304,6 +308,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Sumo Logic", icon: "sumologic" },
       { name: "Tenable", color: "#E7FF00" }, // TODO: logo
       { name: "Mimecast", color: "#000129" }, // TODO: logo
+      { name: "KnowBe4 PhishER", color: "#FF6600" }, // TODO: logo
       { name: "FlareVM", color: "#1AE86A" }, // TODO: logo
     ],
   },
@@ -346,8 +351,8 @@ export const defaultSkillCategory = "security-operations";
 
 export const socials: SocialLink[] = [
   { label: "LinkedIn", href: "https://linkedin.com/in/ericbertero", icon: "linkedin" },
+  { label: "GitHub", href: "https://github.com/EricITA300503", icon: "github" },
   { label: "Email", href: "mailto:eric@ebertero.com", icon: "email" },
-  // TODO: add a GitHub link here if/when one should be public
 ];
 
 export const resume: Resume = {
