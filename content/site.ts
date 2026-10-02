@@ -351,7 +351,7 @@ export const defaultSkillCategory = "security-operations";
 
 export const socials: SocialLink[] = [
   { label: "LinkedIn", href: "https://linkedin.com/in/ericbertero", icon: "linkedin" },
-  { label: "GitHub", href: "https://github.com/EricITA300503", icon: "github" },
+  { label: "GitHub", href: "https://github.com/EricBertero", icon: "github" },
   { label: "Email", href: "mailto:eric@ebertero.com", icon: "email" },
 ];
 
