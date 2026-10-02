@@ -41,8 +41,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local tool settings
-.claude/settings.local.json
-# junction to .agents/skills (would duplicate files in the repo)
-.claude/skills/
-.impeccable/config.local.json
+# Private working notes and AI tooling: kept on the developer's machine, never published.
+# (Roadmap, assistant instructions, design-tool skills and their critique logs.)
+/CLAUDE.md
+/AGENTS.md
+/PLAN.md
+/.claude/
+/.claudeignore
+/.agents/
+/.impeccable/
+/skills-lock.json

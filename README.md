@@ -71,5 +71,3 @@ Site content — your name, bio, skills, projects, experience, and certification
 ## Deployment
 
 Runs as a Docker container reached only through a Cloudflare Tunnel — nothing is ever exposed to the internet directly. See [`DEPLOY.md`](DEPLOY.md) for the full runbook (creating the tunnel, `docker compose up -d --build`, edge hardening, and updates).
-
-See `CLAUDE.md` for the full set of project conventions, and `PLAN.md` for the build roadmap and what's still open.
